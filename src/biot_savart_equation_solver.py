@@ -38,6 +38,7 @@ class BiotSavartEquationSolver:
             B_z(x, y) are the 3 components of the magnetic vector at a given point (x, y) in space. Note that
             B_x = B_y = 0 is always True in our 2D world.
         """
+        #equation de Biot-Savart: B = mu_0*N*I / 2*R, peut etre lequation avec lintegrale aussi
         raise NotImplementedError
 
     def _solve_in_polar_coordinate(
@@ -67,6 +68,7 @@ class BiotSavartEquationSolver:
             B_z(r, θ) are the 3 components of the magnetic vector at a given point (r, θ) in space. Note that
             B_r = B_θ = 0 is always True in our 2D world.
         """
+        #equation de Biot-Savart: B = mu_0*N*I / 2*R
         raise NotImplementedError
 
     def solve(
