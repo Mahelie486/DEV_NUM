@@ -8,7 +8,7 @@ from src.circuit_node import CircuitNode
 from src.coordinate_and_position import Position
 from src.electrical_components import CurrentSource, ElectricalComponent, VoltageSource, Wire
 from src.fields import ScalarField, VectorField
-from src.wire import Wire
+
 
 class Circuit:
     """
@@ -68,14 +68,14 @@ class Circuit:
         edges = list(self.graph.edges)
         edges.sort()
         return edges
-    
+    """
     def __init__(self, wires: List[Wire]):
         self._wires = wires
 
     @property
     def wires(self):
         return self._wire
-
+    """
     def _build_position_to_node_mapping(self):
         """
         Build a mapping from a position to a node. This is used to find the node at a given position.

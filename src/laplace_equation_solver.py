@@ -111,3 +111,4 @@ class LaplaceEquationSolver:
             return self._solve_in_polar_coordinate(constant_voltage, delta_q1, delta_q2)
         else:
             raise NotImplementedError("Only the cartesian and polar coordinates system are implemented.")
+print('okay')
