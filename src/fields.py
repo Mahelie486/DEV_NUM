@@ -211,32 +211,6 @@ class VectorField(np.ndarray):
         """
         return VectorField(np.cross(self, field))
 
-    def __stream_plot_color_bar(self) -> plt.streamplot:
-        """
-        Creates a temporary stream plot used for the colorbar of the field's figure.
-        Returns
-        -------
-        temp_stream_plot : plt.streamplot
-            A temporary stream plot used for the colorbar of the field's figure.
-        """
-        temp_fig = plt.figure()
-        temp_ax = temp_fig.add_subplot(111)
-        temp_stream_plot = temp_ax.streamplot(
-            x=np.arange(0, self.shape[0]),
-            y=np.arange(0, self.shape[1]),
-            u=self.x.T,
-            v=self.y.T,
-            color=np.hypot(self.x.T, self.y.T),
-            linewidth=1,
-            cmap=plt.cm.inferno,
-            density=3,
-            arrowstyle='->',
-            arrowsize=1.5
-        )
-        plt.close(temp_fig)
-
-        return temp_stream_plot
-
     def show(self, **kwargs):
         """
         Show the vector field in the xy plane.
@@ -279,5 +253,6 @@ class VectorField(np.ndarray):
         ax.set_xlabel(xlabel=kwargs.get("x_label", "x"))
         ax.set_ylabel(ylabel=kwargs.get("y_label", "y"))
         ax.set_title(label=kwargs.get("title", ""))
-        fig.colorbar(self.__stream_plot_color_bar().lines, orientation='vertical')
+        fig.colorbar(stream_plot.lines, orientation='vertical')
         plt.show()
+        
