@@ -17,7 +17,7 @@ class BiotSavartEquationSolver:
             delta_x: float,
             delta_y: float
     ) -> VectorField:
-        """
+       """
         Solve the Biot–Savart equation to compute the magnetic field given an electric current field.
 
         Parameters
@@ -56,19 +56,8 @@ class BiotSavartEquationSolver:
                     # Calcul biot savard: sum de tout élément champs rpl int.
                     magnetic_field[row, colmn] = [0, 0, np.sum(mu_0 * cross_part[:,2]/(4*pi*r_norm*3))]
         return VectorField(magnetic_field)
-        """
-        """  
-        Test Am 
-        magnetic_field = electric_current.copy()
-        position, current = [], []
-        for _, j in enumerate(current):
-            for _, k in enumerate(j):
-
-                current = np.pad(current, (delta_x, delta_y), 'constant', constant_values=0)
-    
-                potential = (1/4)*(potential[2:, 1:-1] + potential[:-2, 1:-1] + potential[1:-1, :-2] + potential[1:-1, 2:])
-
-                np.copyto(current, electric_current, where=electric_current != 0)"""
+        
+        
         # Liste pos, current to be generated
         position, current = [], []  # ou courant n'est pas nul
         # electric current is given as a matrix, we iterates on its elements
@@ -99,7 +88,24 @@ class BiotSavartEquationSolver:
                     # Calcul biot savard: sum de tout élément champs rpl int.
                     magnetic_field[row, colmn] = [0, 0, np.sum(mu_0 * cross_part[:,2]/(4*pi*r_norm*3))]
 
-        return VectorField(magnetic_field)
+        return VectorField(magnetic_field)"""
+
+        x, y, z = electric_current.shape
+        champ_total = np.zeros((x, y, z))
+
+        for i in range(0, x, delta_x):
+            for j in range(0, x, delta_y):
+                if electric_current[i, j][0] != 0 or electric_current[i, j][1] != 0 or electric_current[i, j][2] != 0:
+                    champ = np.zeros((x, y, z))
+                    for k in range(0, x, delta_y):
+                        for l in range(0, y, delta_y):
+                            if electric_current[k, l][0] == 0 or electric_current[k, l][1] == 0 or electric_current[k, l][2] == 0:
+                                rx = i-k
+                                ry = j-l
+                                norme_r = math.sqrt(rx**2 + ry**2)
+                                vecteur_r = np.array([rx, ry, 0])
+                                I_x_r = np.cross(electric_current[i, j], vecteur_r)
+        return VectorField(champ_total)
 
 
     def _solve_in_polar_coordinate(
