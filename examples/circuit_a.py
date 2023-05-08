@@ -24,13 +24,13 @@ if __name__ == "__main__":
     wires = [
         Wire((0, 0), (0, 5), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
         Wire((0, 5), (3, 5), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((3, 5), (3, 6), vertical_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
-        Wire((3, 6), (5, 5), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((3, 5), (3, 6), horizontal_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
+        Wire((3, 6), (5, 5), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
         Wire((5, 5), (5, 2), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((5, 2), (5, 1), horizontal_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
+        Wire((5, 2), (5, 1), vertical_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
         Wire((5, 1), (5, 0), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((5, 0), (1, 0), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        VoltageSource((1, 0), (0, 0), vertical_eqs, cartesian_variables, BATTERY_VOLTAGE)
+        Wire((5, 0), (1, 0), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        VoltageSource((1, 0), (0, 0), horizontal_eqs, cartesian_variables, BATTERY_VOLTAGE)
     ]
     ground_position = (1, 0)
 
