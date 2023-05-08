@@ -38,7 +38,7 @@ if __name__ == "__main__":
     circuit = Circuit(wires, ground_position)
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.CARTESIAN, shape=WORLD_SHAPE)
     world.show_circuit(
-        {0: (0, 0), 1: (0, 5), 2: (3, 5), 3: (5, 5), 4: (5, 2), 5: (5, 1), 6: (5, 0), 7: (2, 0), 8: (1, 0)}
+        {0: (0, 0), 1: (0, 5), 2: (3, 5), 3: (4, 5), 4: (5, 5), 5: (5, 2), 6: (5, 1), 7: (5, 0), 8: (2, 0), 9: (1, 0)}
     )
     world.compute()
     world.show_all()
