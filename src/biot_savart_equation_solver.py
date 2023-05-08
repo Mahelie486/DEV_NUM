@@ -13,32 +13,11 @@ class BiotSavartEquationSolver:
     """
 
     def _solve_in_cartesian_coordinate(
-            self,
-            electric_current: VectorField,
-            delta_x: float,
-            delta_y: float
+    self,
+    electric_current: VectorField,
+    delta_x: float,
+     delta_y: float
     ) -> VectorField:
-       """
-        Solve the Biot–Savart equation to compute the magnetic field given an electric current field.
-
-        Parameters
-        ----------
-        electric_current : VectorField
-            A vector field I : ℝ² → ℝ³ ; (x, y) → (I_x(x, y), I_y(x, y), I_z(x, y)), where I_x(x, y), I_y(x, y) and
-            I_z(x, y) are the 3 components of the electric current vector at a given point (x, y) in space. Note that
-            I_z = 0 is always True in our 2D world.
-        delta_x : float
-            Small discretization of the x-axis.
-        delta_y : float
-            Small discretization of the y-axis.
-
-        Returns
-        -------
-        magnetic_field : VectorField
-            A vector field B : ℝ² → ℝ³ ; (x, y) → (B_x(x, y), B_y(x, y), B_z(x, y)), where B_x(x, y), B_y(x, y) and
-            B_z(x, y) are the 3 components of the magnetic vector at a given point (x, y) in space. Note that
-            B_x = B_y = 0 is always True in our 2D world.
-        """
 
         x, y, z = electric_current.shape
         champ_total = np.zeros((x, y, z))
