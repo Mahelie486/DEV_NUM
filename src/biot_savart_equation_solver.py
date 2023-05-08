@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from scipy.constants import mu_0, pi
 
 from src.coordinate_and_position import CoordinateSystem
