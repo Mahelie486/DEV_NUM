@@ -38,8 +38,38 @@ class BiotSavartEquationSolver:
             B_z(x, y) are the 3 components of the magnetic vector at a given point (x, y) in space. Note that
             B_x = B_y = 0 is always True in our 2D world.
         """
-        #equation de Biot-Savart: B = mu_0*N*I / 2*R, peut etre lequation avec lintegrale aussi
-        raise NotImplementedError
+        # Liste pos, current to be generated
+        position, current = [], []  # ou courant n'est pas nul
+        # electric current is given as a matrix, we iterates on its elements
+        # On extrait les veleurs de courant et pos
+        for row, j in enumerate(electric_current):
+            #  (fouille dand liste de listes)
+            for colmn, i in enumerate(j):  # i est la valeur du courant pour ces coordonnées de la matrice
+                if i[0] or i[1] != 0:  # i[0]=courant en x, i[1]=courant en y
+                    position.append((row, colmn, 0))  # on oublie pas que le courant est toujours 0 en z
+                    current.append(i)  # valeur du courant donné précédemment
+        magnetic_field_shape = np.shape(electric_current)
+        # initialise une matrice du champs magnetic dans l'espace avec des 0,
+        # avec espace de meme forme que boucle de courant
+        magnetic_field = np.zeros(magnetic_field_shape)
+
+
+        for row, j in enumerate(magnetic_field):
+            for colmn, i in enumerate(j):
+                # Nb. current génère magnetic_field at a distance, if on the current, dist=0, thus B=0
+                # To save time and avoid risks of error, we do not treat point on the wire
+                if (row, colmn, 0) not in position:  # 0 if in pos et initialized with 0s
+                    # distance (from all current elements?)
+                    r = np.array([row, colmn, 0]) - np.array(position)
+                    r_norm = (np.linalg.norm(r, axis=1))
+                    # portion perpendiculaire(champs perpendiculaire au courant)
+                    cross_part = np.cross(current, r)
+
+                    # Calcul biot savard: sum de tout élément champs rpl int.
+                    magnetic_field[row, colmn] = [0, 0, np.sum(mu_0 * cross_part[:,2]/(4*pi*r_norm*3))]
+
+        return VectorField(magnetic_field)
+
 
     def _solve_in_polar_coordinate(
             self,
