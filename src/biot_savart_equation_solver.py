@@ -38,6 +38,26 @@ class BiotSavartEquationSolver:
             B_z(x, y) are the 3 components of the magnetic vector at a given point (x, y) in space. Note that
             B_x = B_y = 0 is always True in our 2D world.
         """
+        
+        """
+        magnetic_field = np.zeros_like(electric_current) #le champ est une matrice vide de la meme grandeur que celle du courant
+        position, current = [], []
+        for row, j in enumerate(electric_current):
+            for colmn, i in enumerate(j):
+                if i[0] or i[1] != 0:
+                    position.append((row, colmn, 0))
+                    current.append(i)
+                if (row, colmn, 0) not in position:  # 0 if in pos et initialized with 0s
+                    # distance (from all current elements?)
+                    r = np.array([row*delta_x, colmn*delta_y])
+                    r_norm = (np.linalg.norm(r, axis=1))
+                    # portion perpendiculaire(champs perpendiculaire au courant)
+                    cross_part = np.cross(current, r)
+                    # Calcul biot savard: sum de tout élément champs rpl int.
+                    magnetic_field[row, colmn] = [0, 0, np.sum(mu_0 * cross_part[:,2]/(4*pi*r_norm*3))]
+        return VectorField(magnetic_field)
+        """
+        
         # Liste pos, current to be generated
         position, current = [], []  # ou courant n'est pas nul
         # electric current is given as a matrix, we iterates on its elements
