@@ -48,7 +48,30 @@ class LaplaceEquationSolver:
             the electrical components and in the empty space between the electrical components, while the field V
             always gives V(x, y) = 0 if (x, y) is not a point belonging to an electrical component of the circuit.
         """
-        raise NotImplementedError
+        # Équivalence x_i, y_i = i*d, j*d
+        # potential can be modified, not const_volt
+        potential = constant_voltage.copy()
+
+        for _ in range(self.nb_iterations):
+
+            # Initialiser une "grille" de 0 sauf au point/position ou potential
+            # On a des noeuds à des distances x et y a un intervalle qui varie == size array variable
+            potential = np.pad(potential, (delta_x, delta_y), 'constant', constant_values=0)
+
+            # valeur potentiel selon expression trouvé en 1)
+            # nb. vu qu'on a des j-1 et j-2 la valeur de j doit être a une colonne de chaque coté d'un array
+            # j-1 max est donc a 2 collonne du bout de l'array pour de j+1 puise exister et ainsi de suite
+            potential = (1/4)*(potential[2:, 1:-1] + potential[:-2, 1:-1] + potential[1:-1, :-2] + potential[1:-1, 2:])
+
+
+            # np.copyto(destination_array, src= array from which values are copied,
+            # whatever, where=boolean array, when value is true, then element are copied
+            # from the source to destination )
+            np.copyto(potential, constant_voltage, where=constant_voltage != 0)
+            # ou changement de chaque it est causé puisque potential change dynamiquement
+
+        
+        return ScalarField(potential)
 
     def _solve_in_polar_coordinate(
             self,
@@ -77,7 +100,18 @@ class LaplaceEquationSolver:
             the electrical components and in the empty space between the electrical components, while the field V
             always gives V(r, θ) = 0 if (r, θ) is not a point belonging to an electrical component of the circuit.
         """
-        raise NotImplementedError
+
+        potential = constant_voltage.copy()
+
+        for i in range(self.nb_iterations):
+
+            potential = np.pad(potential, (delta_r, delta_theta), 'constant', constant_values=0)
+            # maybe something is wrong in how the first term was written
+            potential = (((i*delta_r)**2)*delta_theta**2)/(2*((i*delta_r)**2)*(delta_theta**2 + 1)) * (potential[2:, 1:-1] + potential[-2:, 1:-1])
+
+            np.copyto(potential, constant_voltage, where=constant_voltage != 0)
+            return ScalarField(potential)
+
 
     def solve(
             self,

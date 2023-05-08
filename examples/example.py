@@ -8,7 +8,7 @@ from src import Circuit, CoordinateSystem, VoltageSource, Wire, World
 if __name__ == "__main__":
     WORLD_SHAPE = (101, 101)
     BATTERY_VOLTAGE = 1.0
-    HIGH_WIRE_RESISTANCE = 1.0
+    HIGH_WIRE_RESISTANCE = 1.0  # Probablement carrément une résistance -AM
     LOW_WIRE_RESISTANCE = 0.01
 
     cartesian_variables = Symbol("x"), Symbol("y")
