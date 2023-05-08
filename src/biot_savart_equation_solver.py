@@ -38,22 +38,6 @@ class BiotSavartEquationSolver:
             B_z(x, y) are the 3 components of the magnetic vector at a given point (x, y) in space. Note that
             B_x = B_y = 0 is always True in our 2D world.
         """
-   
-        magnetic_field = electric_current.copy()
-        position, current = [], []
-        for _, j in enumerate(current):
-            for _, k in enumerate(j):
-
-                current = np.pad(current, (delta_x, delta_y), 'constant', constant_values=0)
-    
-                potential = (1/4)*(potential[2:, 1:-1] + potential[:-2, 1:-1] + potential[1:-1, :-2] + potential[1:-1, 2:])
-
-                np.copyto(current, electric_current, where=electric_current != 0)
-
-
-
-
-
         # Liste pos, current to be generated
         position, current = [], []  # ou courant n'est pas nul
         # electric current is given as a matrix, we iterates on its elements
