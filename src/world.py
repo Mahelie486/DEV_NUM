@@ -152,13 +152,10 @@ class World:
           #  self._magnetic_field = BiotSavartEquationSolver().solve(self._wires_current)
            # self._electric_field = -self._potential.gradient()
             #self._energy_flux = 1/mu_0*(self._electric_field.cross(self._magnetic_field))
-        if not self.Circuit: #je sais pas quoi mettre ici
-            raise ValueError
-        else:
-            self._potential = LaplaceEquationSolver(nb_relaxation_iterations).solve(self._circuit_voltage)
-            self._magnetic_field = BiotSavartEquationSolver().solve(self._circuit_current)
-            self._electric_field = -self._potential.gradient()
-            self._energy_flux = 1/mu_0*(self._electric_field.cross(self._magnetic_field))
+        self._potential = LaplaceEquationSolver(nb_relaxation_iterations).solve(self._circuit_voltage)
+        self._magnetic_field = BiotSavartEquationSolver().solve(self._circuit_current)
+        self._electric_field = -np.gradient(self._potential)
+        self._energy_flux = 1/mu_0*(np.cross(self._electric_field, self._magnetic_field))
      
 
     def show_circuit(self, nodes_position_in_figure: dict = None):
