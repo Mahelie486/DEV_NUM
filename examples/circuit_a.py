@@ -22,25 +22,23 @@ if __name__ == "__main__":
     horizontal_eqs = (x_expression_horizontal, y_expression_horizontal)
 
     wires = [
-        Wire((1, 0), (0, 0), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
         Wire((0, 0), (0, 5), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
         Wire((0, 5), (3, 5), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((3, 5), (3, 6), vertical_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
-        Wire((3, 6), (5, 6), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((5, 6), (5, 5), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((3, 5), (4, 5), horizontal_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
+        Wire((4, 5), (5, 5), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
         Wire((5, 5), (5, 2), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
         Wire((5, 2), (5, 1), vertical_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
         Wire((5, 1), (5, 0), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
         Wire((5, 0), (2, 0), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        VoltageSource((2, 0), (1, 0), horizontal_eqs, cartesian_variables, BATTERY_VOLTAGE)
-        
+        VoltageSource((2, 0), (1, 0), horizontal_eqs, cartesian_variables, BATTERY_VOLTAGE),
+        Wire((1, 0), (0, 0), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE)
     ]
     ground_position = (1, 0)
 
     circuit = Circuit(wires, ground_position)
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.CARTESIAN, shape=WORLD_SHAPE)
     world.show_circuit(
-        {0: (1, 0), 1: (0, 0), 2: (0, 5), 3: (3, 5), 4: (3, 6), 5: (5, 6), 6: (5, 5), 7: (5, 2), 8:(5, 1), 9:(5, 0), 10:(2, 0)}
+        {0: (0, 0), 1: (0, 5), 2: (3, 5), 3: (5, 5), 4: (5, 2), 5: (5, 1), 6: (5, 0), 7: (2, 0), 8: (1, 0)}
     )
     world.compute()
     world.show_all()
