@@ -30,7 +30,7 @@ if __name__ == "__main__":
         Wire((5, 2), (5, 1), horizontal_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
         Wire((5, 1), (5, 0), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
         Wire((5, 0), (1, 0), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        VoltageSource((1, 0), (1, 5), vertical_eqs, cartesian_variables, BATTERY_VOLTAGE)
+        VoltageSource((1, 0), (0, 0), vertical_eqs, cartesian_variables, BATTERY_VOLTAGE)
     ]
     ground_position = (1, 0)
 
