@@ -38,9 +38,6 @@ class BiotSavartEquationSolver:
             A vector field B : ℝ² → ℝ³ ; (x, y) → (B_x(x, y), B_y(x, y), B_z(x, y)), where B_x(x, y), B_y(x, y) and
             B_z(x, y) are the 3 components of the magnetic vector at a given point (x, y) in space. Note that
             B_x = B_y = 0 is always True in our 2D world.
-        """
-        
-        """
         magnetic_field = np.zeros_like(electric_current) #le champ est une matrice vide de la meme grandeur que celle du courant
         position, current = [], []
         for row, j in enumerate(electric_current):
