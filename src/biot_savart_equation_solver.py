@@ -68,8 +68,14 @@ class BiotSavartEquationSolver:
             B_z(r, θ) are the 3 components of the magnetic vector at a given point (r, θ) in space. Note that
             B_r = B_θ = 0 is always True in our 2D world.
         """
-        #equation de Biot-Savart: B = mu_0*N*I / 2*R
-        raise NotImplementedError
+        B_r = 0
+        B_θ = 0
+        magnetic_field = np.array([B_r, B_θ])
+        
+        for i in range(self.nb_iterations):
+            B_r += (mu_0*electric_current / 4*pi) * (delta_r*np.cos(delta_theta))/(delta_r**2 + delta_theta**2)
+            B_θ += (mu_0*electric_current / 4*pi) * (np.sin(delta_theta))/(delta_r**2 + delta_theta**2)
+        return VectorField(magnetic_field)
 
     def solve(
             self,
