@@ -38,6 +38,22 @@ class BiotSavartEquationSolver:
             B_z(x, y) are the 3 components of the magnetic vector at a given point (x, y) in space. Note that
             B_x = B_y = 0 is always True in our 2D world.
         """
+   
+        magnetic_field = electric_current.copy()
+        position, current = [], []
+        for _, j in enumerate(current):
+            for _, k in enumerate(j):
+
+                current = np.pad(current, (delta_x, delta_y), 'constant', constant_values=0)
+    
+                potential = (1/4)*(potential[2:, 1:-1] + potential[:-2, 1:-1] + potential[1:-1, :-2] + potential[1:-1, 2:])
+
+                np.copyto(current, electric_current, where=electric_current != 0)
+
+
+
+
+
         # Liste pos, current to be generated
         position, current = [], []  # ou courant n'est pas nul
         # electric current is given as a matrix, we iterates on its elements
@@ -97,7 +113,7 @@ class BiotSavartEquationSolver:
             A vector field B : ℝ² → ℝ³ ; (r, θ) → (B_r(r, θ), B_θ(r, θ), B_z(r, θ)), where B_r(r, θ), B_θ(r, θ) and
             B_z(r, θ) are the 3 components of the magnetic vector at a given point (r, θ) in space. Note that
             B_r = B_θ = 0 is always True in our 2D world.
-        """
+        
         B_r = 0
         B_θ = 0
         magnetic_field = np.array([B_r, B_θ])
@@ -106,6 +122,29 @@ class BiotSavartEquationSolver:
             B_r += (mu_0*electric_current / 4*pi) * (delta_r*np.cos(delta_theta))/(delta_r**2 + delta_theta**2)
             B_θ += (mu_0*electric_current / 4*pi) * (np.sin(delta_theta))/(delta_r**2 + delta_theta**2)
         return VectorField(magnetic_field)
+        """
+        # row = radius
+        # colmn = theta
+        # introduire conversion entre polar et cartésien et utiliser la même méthode, nb ne pas oublier de considérer les delta en premier pour avoir vrai distance
+        position, current = [], []
+        for row, j in enumerate(electric_current):
+            for colmn, i in enumerate(j):
+                if i[0] or i[1] != 0:
+                    # vrai position
+                    position.append((row*delta_r, colmn*delta_theta, 0))  # même si en polair on ajoute composante e  z pour faciliter écriture champs tto
+                    current.append(i)
+        magnetic_field_shape = np.shape(electric_current)
+        magnetic_field = np.zeros(magnetic_field_shape)
+
+
+        for row, j in enumerate(magnetic_field):
+            for colmn, i in enumerate(j):
+                if (row*delta_r, colmn*delta_theta, 0) not in position:  # En terme de vrai position
+                    # on devrait soustraire distance entre 2 point, plus facile en cartésien donc convertir and get back?
+                    r = np.array([row*delta_r, colmn*delta_theta, 0]) - np.array(position)
+                    r_norm = (np.linalg.norm(r, axis=1))
+                    cross_part = np.cross(current, r)
+                    magnetic_field[row, colmn] = [0, 0, np.sum(mu_0 * cross_part[:,2]/(4*pi*r_norm*3))]
 
     def solve(
             self,
