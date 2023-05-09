@@ -33,6 +33,7 @@ if __name__ == "__main__":
     y_expression_horizontal = 0 * y
     dpl_circum = (x_expression_horizontal, y_expression_horizontal)
 """
+# Essai paramètres cartésien pour cercle
 if __name__ == "__main__":
     WORLD_SHAPE = (101, 101)
     BATTERY_VOLTAGE = 1.0
@@ -48,7 +49,7 @@ if __name__ == "__main__":
     expression_dpl_rayon = 0
     expression_dpl_theta = asin(x/(sqrt(x**2 + y**2)))
     theta_eqn = (expression_dpl_rayon, expression_dpl_theta)
-
+# on trace juste un cercle pour les tests
     wires = [
         Wire((2, 2), (3, 1), theta_eqn, cartesian_variables, LOW_WIRE_RESISTANCE),
         Wire((3, 1), (2, 0), theta_eqn, cartesian_variables, HIGH_WIRE_RESISTANCE),
