@@ -181,7 +181,7 @@ class World:
         """
         Shows the electric potential.
         """
-        self._potential.show(title="Potential")
+        self._potential.show(title="Potential [V]")
 
     def show_electric_field(self, hide_components: bool = True):
         """
@@ -200,19 +200,19 @@ class World:
         else:
             electric_field = self._electric_field
 
-        electric_field.show(title="Electric field")
+        electric_field.show(title="Electric field [V/m]")
 
     def show_magnetic_field(self):
         """
         Shows the z-component of the magnetic field.
         """
-        self._magnetic_field.z.show(title="Magnetic field (z component)")
+        self._magnetic_field.z.show(title="Magnetic field (z component) [T]")
 
     def show_energy_flux(self):
         """
         Shows the energy flux.
         """
-        self._energy_flux.show(title="Energy flux")
+        self._energy_flux.show(title="Energy flux [W/m²]")
 
     def show_all(self):
         """
