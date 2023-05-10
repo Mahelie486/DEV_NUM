@@ -2,8 +2,11 @@ import env_examples  # Modifies path, DO NOT REMOVE
 
 from sympy import Symbol
 
+from math import cos, sin, sqrt
+
 from src import Circuit, CoordinateSystem, VoltageSource, Wire, World
 
+# Essai paramètres cartésien pour cercle
 if __name__ == "__main__":
     WORLD_SHAPE = (101, 101)
     BATTERY_VOLTAGE = 1.0
@@ -13,31 +16,28 @@ if __name__ == "__main__":
     cartesian_variables = Symbol("x"), Symbol("y")
     x, y = cartesian_variables
 
-    x_expression_vertical = 0 * x
-    y_expression_vertical = y
-    vertical_eqs = (x_expression_vertical, y_expression_vertical)
+    # dpl le long du rayon = dpl selon eqn d'une ligne
+    expression_dpl_x = x
+    expression_dpl_y = y*x  # bullshit maybe mais but est d'avoir eqn d'une ligne avec taux de variation
+    rayon_eqn = (expression_dpl_x, expression_dpl_y)
 
-    x_expression_horizontal = x
-    y_expression_horizontal = 0 * y
-    horizontal_eqs = (x_expression_horizontal, y_expression_horizontal)
+    expression_dpl_x = x
+    expression_dpl_y = sqrt(sqrt(x**2 + y**2) - x**2)
+    theta_eqn = (expression_dpl_x, expression_dpl_y)
 
+# on trace juste un cercle pour les tests => apres update de nouvelles eqns pas sur ça marche
     wires = [
-        Wire((0, 0), (0, 5), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((0, 5), (3, 5), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((3, 5), (3, 6), vertical_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
-        Wire((3, 6), (5, 5), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((5, 5), (5, 2), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((5, 2), (5, 1), horizontal_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
-        Wire((5, 1), (5, 0), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((5, 0), (1, 0), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        VoltageSource((1, 0), (0, 0), vertical_eqs, cartesian_variables, BATTERY_VOLTAGE)
+        Wire((2, 2), (3, 1), theta_eqn, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((3, 1), (2, 0), theta_eqn, cartesian_variables, HIGH_WIRE_RESISTANCE),
+        Wire((2, 0), (1, 1), theta_eqn, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((1, 1), (2, 2), theta_eqn, cartesian_variables, LOW_WIRE_RESISTANCE)
     ]
-    ground_position = (1, 0)
+    ground_position = (2, 2)
 
     circuit = Circuit(wires, ground_position)
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.CARTESIAN, shape=WORLD_SHAPE)
     world.show_circuit(
-        {0: (0, 0), 1: (0, 5), 2: (3, 5), 3: (5, 5), 4: (5, 2), 5: (5, 1), 6: (5, 0), 7: (1, 0)}
+        {0: (2, 2), 1: (3, 1), 2: (2, 0), 3: (1, 1)}
     )
     world.compute()
     world.show_all()
