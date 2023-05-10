@@ -145,10 +145,18 @@ class World:
         nb_relaxation_iterations : int
             Number of iterations performed to obtain the potential by the relaxation method (default = 1000)
         """
-        self._potential = LaplaceEquationSolver(nb_relaxation_iterations).solve(self._circuit_voltage)
-        self._magnetic_field = BiotSavartEquationSolver().solve(self._circuit_current)
-        self._electric_field = -np.gradient(self._potential)
-        self._energy_flux = 1/mu_0*(np.cross(self._electric_field, self._magnetic_field))
+        if self._coordinate_system == CoordinateSystem.CARTESIAN:
+            self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_cartesian_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
+            self._magnetic_field = BiotSavartEquationSolver()._solve_in_cartesian_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
+            self._electric_field = -np.gradient(self._potential)
+            self._energy_flux = 1/mu_0*(np.cross(self._electric_field, self._magnetic_field))
+        elif self._coordinate_system == CoordinateSystem.POLAR:
+            self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_polar_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
+            self._magnetic_field = BiotSavartEquationSolver()._solve_in_polar_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
+            self._electric_field = -np.gradient(self._potential)
+            self._energy_flux = 1/mu_0*(np.cross(self._electric_field, self._magnetic_field))
+        else:
+            raise NotImplementedError("Only the cartesian and polar coordinates solvers are implemented.")
      
 
     def show_circuit(self, nodes_position_in_figure: dict = None):
