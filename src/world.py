@@ -145,13 +145,6 @@ class World:
         nb_relaxation_iterations : int
             Number of iterations performed to obtain the potential by the relaxation method (default = 1000)
         """
-        #if not self.wires:
-         #   raise ValueError("Place at least one wire before computing the circuits' fields.")
-        #else:
-         #   self._potential = LaplaceEquationSolver(nb_relaxation_iterations).solve(self._wires_voltage)
-          #  self._magnetic_field = BiotSavartEquationSolver().solve(self._wires_current)
-           # self._electric_field = -self._potential.gradient()
-            #self._energy_flux = 1/mu_0*(self._electric_field.cross(self._magnetic_field))
         self._potential = LaplaceEquationSolver(nb_relaxation_iterations).solve(self._circuit_voltage)
         self._magnetic_field = BiotSavartEquationSolver().solve(self._circuit_current)
         self._electric_field = -np.gradient(self._potential)
