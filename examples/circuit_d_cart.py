@@ -1,19 +1,11 @@
-import env_examples
-
-#from src import Circuit, Current, Wire, World
-#import time
-#!!en polaire aussi celui-ci!!
-#polaire + cartésien
 import env_examples  # Modifies path, DO NOT REMOVE
 
 from sympy import Symbol
 
-from math import cos, sin, pi, sqrt, asin
-
 from src import Circuit, CoordinateSystem, VoltageSource, Wire, World
 
-"""
-# Essaie en cartésien
+import numpy as np
+
 if __name__ == "__main__":
     WORLD_SHAPE = (101, 101)
     BATTERY_VOLTAGE = 1.0
@@ -23,45 +15,44 @@ if __name__ == "__main__":
     cartesian_variables = Symbol("x"), Symbol("y")
     x, y = cartesian_variables
 
-    # On triche equation pour que paramètres polaire donne dpl cartésien, donc donne vrai x et y
-    # En bref ça fait les lignes droites
-    dpl_rayon_x= x
-    dpl_rayon_y = x*sin(theta)
-    dpl_rayon = (dpl_rayon_x, dpl_rayon_y)  # dpl le long rayon, mais fait en cartésien
+    x_expression_vertical = 0 * x
+    y_expression_vertical = y
+    vertical_eqs = (x_expression_vertical, y_expression_vertical)
 
-    dpl_cicum = theta/2*pi
+    x_expression_horizontal = x
     y_expression_horizontal = 0 * y
-    dpl_circum = (x_expression_horizontal, y_expression_horizontal)
-"""
-# Essai paramètres cartésien pour cercle
-if __name__ == "__main__":
-    WORLD_SHAPE = (101, 101)
-    BATTERY_VOLTAGE = 1.0
-    HIGH_WIRE_RESISTANCE = 1.0
-    LOW_WIRE_RESISTANCE = 0.01
+    horizontal_eqs = (x_expression_horizontal, y_expression_horizontal)
 
-    cartesian_variables = Symbol("x"), Symbol("y")
-    x, y = cartesian_variables
-    expression_dpl_rayon = sqrt(x**2 + y**2)
-    expression_dpl_theta = 0
-    rayon_eqn = (expression_dpl_rayon, expression_dpl_theta)
+    x_expression_diagonal = x
+    y_expression_diagonal = y
+    diagonal_eqs = (x_expression_diagonal, y_expression_diagonal)
 
-    expression_dpl_rayon = 0
-    expression_dpl_theta = asin(x/(sqrt(x**2 + y**2)))
-    theta_eqn = (expression_dpl_rayon, expression_dpl_theta)
-# on trace juste un cercle pour les tests
+    theta_1 = np.pi / 24
+    theta_2 = np.pi / 3
+
     wires = [
-        Wire((2, 2), (3, 1), theta_eqn, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((3, 1), (2, 0), theta_eqn, cartesian_variables, HIGH_WIRE_RESISTANCE),
-        Wire((2, 0), (1, 1), theta_eqn, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((1, 1), (2, 2), theta_eqn, cartesian_variables, LOW_WIRE_RESISTANCE)
+        Wire((60*np.cos(theta_1), 60*np.sin(theta_1)), (74*np.cos(theta_1), 74*np.sin(theta_1)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((74*np.cos(theta_1), 74*np.sin(theta_1)), (74*np.cos(np.pi / 7), 74*np.sin(np.pi / 7)), diagonal_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
+        Wire((74*np.cos(np.pi / 7), 74*np.sin(np.pi / 7)), (74*np.cos(2*np.pi / 9), 74*np.sin(2*np.pi / 9)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((74*np.cos(2*np.pi / 9), 74*np.sin(2*np.pi / 9)), (74*np.cos(theta_2), 74*np.sin(theta_2)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((74*np.cos(theta_2), 74*np.sin(theta_2)), (60*np.cos(theta_2), 60*np.sin(theta_2)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((60*np.cos(theta_2), 60*np.sin(theta_2)), (60*np.cos(2*np.pi / 9), 60*np.sin(2*np.pi / 9)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        VoltageSource((60*np.cos(2*np.pi / 9), 60*np.sin(2*np.pi / 9)), (60*np.cos(np.pi / 7), 60*np.sin(np.pi / 7)), diagonal_eqs, cartesian_variables, BATTERY_VOLTAGE),
+        Wire((60*np.cos(np.pi / 7), 60*np.sin(np.pi / 7)), (60*np.cos(theta_1), 60*np.sin(theta_1)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
     ]
-    ground_position = (2, 2)
+    ground_position = (60*np.cos(2*np.pi / 9), 60*np.sin(2*np.pi / 9))
 
     circuit = Circuit(wires, ground_position)
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.CARTESIAN, shape=WORLD_SHAPE)
     world.show_circuit(
-        {0: (2, 2), 1: (3, 1), 2: (2, 0), 3: (1, 1)}
+        {0: (60*np.cos(theta_1), 60*np.sin(theta_1)),
+        1: (74*np.cos(theta_1), 74*np.sin(theta_1)),
+        2: (74*np.cos(np.pi / 7), 74*np.sin(np.pi / 7)),
+        3: (74*np.cos(2*np.pi / 9), 74*np.sin(2*np.pi / 9)), 
+        4: (74*np.cos(theta_2), 74*np.sin(theta_2)), 
+        5: (60*np.cos(theta_2), 60*np.sin(theta_2)), 
+        6: (60*np.cos(2*np.pi / 9), 60*np.sin(2*np.pi / 9)),
+        7: (60*np.cos(np.pi / 7), 60*np.sin(np.pi / 7))}
     )
     world.compute()
     world.show_all()
