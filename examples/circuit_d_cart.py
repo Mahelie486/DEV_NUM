@@ -32,8 +32,8 @@ if __name__ == "__main__":
 
     wires = [
         Wire((60*np.cos(theta_1), 60*np.sin(theta_1)), (74*np.cos(theta_1), 74*np.sin(theta_1)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((74*np.cos(theta_1), 74*np.sin(theta_1)), (74*np.cos(np.pi / 7), 74*np.sin(np.pi / 7)), diagonal_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
-        Wire((74*np.cos(np.pi / 7), 74*np.sin(np.pi / 7)), (74*np.cos(2*np.pi / 9), 74*np.sin(2*np.pi / 9)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((74*np.cos(theta_1), 74*np.sin(theta_1)), (74*np.cos(np.pi / 7), 74*np.sin(np.pi / 7)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((74*np.cos(np.pi / 7), 74*np.sin(np.pi / 7)), (74*np.cos(2*np.pi / 9), 74*np.sin(2*np.pi / 9)), diagonal_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
         Wire((74*np.cos(2*np.pi / 9), 74*np.sin(2*np.pi / 9)), (74*np.cos(theta_2), 74*np.sin(theta_2)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
         Wire((74*np.cos(theta_2), 74*np.sin(theta_2)), (60*np.cos(theta_2), 60*np.sin(theta_2)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
         Wire((60*np.cos(theta_2), 60*np.sin(theta_2)), (60*np.cos(2*np.pi / 9), 60*np.sin(2*np.pi / 9)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
