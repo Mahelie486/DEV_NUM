@@ -22,6 +22,8 @@ class BiotSavartEquationSolver:
         position, current = [], []
         dim_x, dim_y, dim_z = electric_current.shape
         magnetic_field = np.zeros((dim_x, dim_y, dim_z))
+        return magnetic_field
+        """"
         # remplace intégration en couvrant espaces en bond de delta
         for i in range(0, dim_x, delta_x):
             for j in range(0, dim_y, delta_y):
@@ -40,6 +42,7 @@ class BiotSavartEquationSolver:
                     # Calcul biot savard: sum de tout élément champs rpl int.
                     magnetic_field[i, j] = [0, 0, np.sum(mu_0 * cross_part[:,2]/(4*pi*r_norm*3))]
         return VectorField(magnetic_field)
+        """
         """"
                     for k in range(0, dim_x, delta_y):
                         for l in range(0, dim_y, delta_y):

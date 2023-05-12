@@ -4,6 +4,8 @@ from sympy import Symbol
 
 from src import Circuit, CoordinateSystem, VoltageSource, Wire, World
 
+from src.laplace_equation_solver import LaplaceEquationSolver
+
 
 if __name__ == "__main__":
     WORLD_SHAPE = (101, 101)
@@ -36,11 +38,16 @@ if __name__ == "__main__":
 
     circuit = Circuit(wires, ground_position)
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.CARTESIAN, shape=WORLD_SHAPE)
+    """
     world.show_circuit(
         {0: (26, 60), 1: (26, 74), 2: (74, 74), 3: (74, 60), 4: (74, 40), 5: (74, 26), 6: (26, 26), 7: (26, 40)}
     )
     world.compute()
     world.show_all()
+    """
 
-    a, b = circuit.get_voltage_and_current_fields(WORLD_SHAPE, [0,0], [101, 101])
-    print(a)
+    a, b = circuit.get_voltage_and_current_fields(WORLD_SHAPE, [26,26], [74, 74])
+    print(a)  # a est le volatage en tout point = aussi un scalar
+    laplace = LaplaceEquationSolver()
+    tests =  laplace._solve_in_cartesian_coordinate(a, 0.01, 0.01)
+    print(tests)
