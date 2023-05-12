@@ -42,5 +42,5 @@ if __name__ == "__main__":
     world.compute()
     world.show_all()
 
-    a, b = circuit.get_voltage_and_current_fields(WORLD_SHAPE, (0,0), (101, 101))
+    a, b = circuit.get_voltage_and_current_fields(WORLD_SHAPE, [0,0], [101, 101])
     print(a)
