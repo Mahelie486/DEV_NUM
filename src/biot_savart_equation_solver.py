@@ -55,7 +55,10 @@ class BiotSavartEquationSolver:
                 if current_x != 0 or current_y != 0:
                     position = np.array(position.tolist() + [[i, j, 0]])
                     current = np.array(current.tolist() + [[current_x, current_y, 0]])
-                    
+
+        for i in range(dim_x):
+            for j in range(dim_y):
+                current_x, current_y= electric_current[i][j][0], electric_current[i][j][1]            
                 if current_x == 0 and current_y == 0:
                     distance = position - [i, j, 0]
                     r_norm = (np.linalg.norm(distance, axis=1))
@@ -105,7 +108,7 @@ class BiotSavartEquationSolver:
         position, current = [], []
         position, current = np.array(position), np.array(current)
         
-        dim_r, dim_theta = 10, 10
+        dim_r, dim_theta = 101, 101
         magnetic_field = np.zeros((dim_r, dim_theta, 3))
     
         for i in range(dim_r):
@@ -115,7 +118,9 @@ class BiotSavartEquationSolver:
                 if current_r != 0 or current_theta != 0:
                     position = np.array(position.tolist() + [[i, j, 0]])
                     current = np.array(current.tolist() + [[current_r, current_theta]])
-                    
+        for i in range(dim_r):
+            for j in range(dim_theta):
+                current_r, current_theta= electric_current[i][j][0], electric_current[i][j][1]
                 if current_r == 0 and current_theta == 0:
                     # distance
                     r_1 = i
@@ -123,6 +128,7 @@ class BiotSavartEquationSolver:
                     diff_theta = j - position[:, 1]  # vecteur direction
                     # Cause une division par 0 à qql part ici, bref des 0 dans distance mais devrait pas en avoir avec la condition initial
                     distance_sca = np.sqrt(r_1**2 + r_2**2 - 2*r_1*r_2*np.cos(diff_theta))  # matrice de distance avec tte el. courant, on perd l'aspect vectoriel en perdant theta
+                 
                     # B_z = distance_sca.copy()
                     # B_z.fill(0)
                     # dist_vect = np.vstack((distance_sca, diff_theta, B_z))
@@ -132,6 +138,8 @@ class BiotSavartEquationSolver:
                     # Ne change pas
                     magnetic_field[i][j][2] = champs_bio
         return VectorField(magnetic_field)
+
+        # return distance_sca 
 
 
     def solve(
