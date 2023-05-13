@@ -41,16 +41,16 @@ if __name__ == "__main__":
 
     circuit = Circuit(wires, ground_position)
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.CARTESIAN, shape=WORLD_SHAPE)
-    """
+
     world.show_circuit(
         {0: (0, 0), 1: (0, 100), 2: (60, 100), 3: (80, 100), 4: (100, 100), 5: (100, 40), 6: (100, 20), 7: (100, 0), 8: (40, 0), 9: (20, 0)}
     )
     world.compute()
     world.show_all()
-    """
+    """"
     a, b = circuit.get_voltage_and_current_fields(WORLD_SHAPE, [0,0], [6, 6]) #quand c'ai fais X20 je l'ai pas fais ici
     # print(a)  # a est le voltage en tout point = aussi un scalar
-    """
+
     laplace = LaplaceEquationSolver()
     tests =  laplace._solve_in_cartesian_coordinate(a, 1, 1)  # Permet de checker ce qui est retourné par Laplace pour ce circuit
     print(tests)
