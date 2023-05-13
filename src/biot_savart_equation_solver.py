@@ -134,7 +134,7 @@ class BiotSavartEquationSolver:
                     # dist_vect = np.vstack((distance_sca, diff_theta, B_z))
                     dist_vect = np.vstack((distance_sca, diff_theta))
                     cross_part = np.cross(current, np.transpose(dist_vect))  # [:, 2]
-                    champs_bio = np.sum(mu_0 * cross_part/(4*pi*distance_sca**3))
+                    champs_bio = np.sum(mu_0 * cross_part/(4*pi*4**3))
                     # Ne change pas
                     magnetic_field[i][j][2] = champs_bio
         return VectorField(magnetic_field)
