@@ -48,13 +48,13 @@ if __name__ == "__main__":
     world.compute()
     world.show_all()
     """
-    a, b = circuit.get_voltage_and_current_fields(WORLD_SHAPE, [60,60], [101, 101])
+    a, b = circuit.get_voltage_and_current_fields(WORLD_SHAPE, [0,0], [6, 6])
     # print(a)  # a est le voltage en tout point = aussi un scalar
     """
     laplace = LaplaceEquationSolver()
     tests =  laplace._solve_in_cartesian_coordinate(a, 1, 1)  # Permet de checker ce qui est retourné par Laplace pour ce circuit
     print(tests)
     """
-    Biot = BiotSavartEquationSolver()
-    Magn =  Biot._solve_in_cartesian_coordinate(b, 1, 1)  # Permet de checker ce qui est retourné par Laplace pour ce circuit
-    print(Magn)
+    #Biot = BiotSavartEquationSolver()
+    #Magn =  Biot._solve_in_cartesian_coordinate(b, 1, 1)  # Permet de checker ce qui est retourné par Laplace pour ce circuit
+    #print(Magn)
