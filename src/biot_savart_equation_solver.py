@@ -47,31 +47,27 @@ class BiotSavartEquationSolver:
         
         dim_x, dim_y = 10, 10 # World_shape de chaque circuit
         # calcul pour amener champs en z, donc on init la pos
-        magnetic_field = np.zeros((dim_x, dim_y, 10))
+        magnetic_field = np.zeros((dim_x, dim_y, 3))  # 3 pcq 3 vecteurs à la fin: B_x, B_y, B_z
     
-        # remplace intégration en couvrant espaces en bond de delta
+        # couvre espace en bond de delta
         for i in range(dim_x):  # les delta x et y sont de 1 anyway
             for j in range(dim_y):
                 current_x, current_y= electric_current[i][j][0], electric_current[i][j][1]  # À position i, j = x, y
                 if current_x != 0 or current_y != 0:
-                    print(current_x.shape)
-                    # Besoin de list pour que ça fonctionne
                     position = np.array(position.tolist() + [[i, j, 0]])
                     current = np.array(current.tolist() + [[current_x, current_y, 0]])
-                    # Fais une grosse liste plutot que liste de liste sur lequel le reste repose
                 if [i, j, 0] not in position:  # tte les position ou il y a un courant, donc dist. de el. courant = 0
-                    # distance (from all current elements?)
-                    # besoin de matrice pour que fonctionne
+                    # distance (from all current elements)
                     distance = position - [i, j, 0]  # = direct un array de distance de tous element de courant d'un point, en [x, y]
                     r_norm = (np.linalg.norm(distance, axis=1))
-                    # portion perpendiculaire(champs perpendiculaire au courant)
+                    print(r_norm)
+                    # portion perpendiculaire(champs perpendiculaire au courant) + change format matrice
                     cross_part = np.cross(current, distance)[:, 2]
+                    # pour champs un point, fais sum de contribution de tous les éléments autour
                     champs_bio = np.sum(mu_0 * cross_part/(4*pi*r_norm*3))
-                    print(champs_bio)
-                    # Calcul biot savard: sum de tout élément champs rpl int.
-
-                    #Probleme 2
-                    # magnetic_field[i][j][:, 2] = champs_bio # Ne fonctionne pas
+                    # print(champs_bio)
+                    #Probleme 2? 
+                    magnetic_field[i][j][2] = champs_bio # Ne fonctionne pas
                     # comme electric_current, mais avec une liste de 3 plutôt que 2
         return VectorField(magnetic_field)
 
