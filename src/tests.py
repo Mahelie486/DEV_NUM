@@ -11,7 +11,7 @@ arr = [1, 3, 2, 5, 4]
 pad_arr = np.pad(arr, (3, 2), 'constant', constant_values=1)
   
 print(pad_arr)
-"""
+
 electric_current = [[["I_1x", "I_1y"], ["I_2x", "I_2y"]], [["I_3x", "I_3y"], ["I_4x", "I_4y"]]]
 print(len(electric_current))
 position = []
@@ -26,24 +26,37 @@ x = np.array([[3, 1, 0], [4, 1, 0], [5, 1, 0]])
 # n = len(x) + 1
 y = np.array([[1, 1, 0], [1, 1, 0], [1, 1, 0]])
 # x = np.append([x], [[5, 1, 0]])
+x[0][0] = 0
 print(x)
-x = np.array(x.tolist() + [[0, 0, 0]])
+# x = np.array(x.tolist() + [[0, 0, 0]])
 
 # distance = x- [1, 0, 0]
 print('\n')
-print(x)
+# print(x)
 # (distance)
 
-"""
 print(x)
 # r_norm = (np.linalg.norm(distance, axis=1)) # yields float
 (print('\n'))
 # print(np.cross(x, y))
 z = np.cross(x, y)
 print(z)
-(print('\n'))
+
 print(np.array(z[:, 2]))
 z[:, 2] = [0, 0, 0]
 print(z)
 # print(np.sum(z))
 """
+dim_x, dim_y = 4, 4
+magnetic_field = np.zeros((dim_x, dim_y, 3))
+print(magnetic_field)
+
+(print('\n'))
+
+print(magnetic_field[0])
+
+(print('\n'))
+for i in range(4):
+    for j in range(4):
+        magnetic_field[i][j][2] = 2
+print(magnetic_field)
