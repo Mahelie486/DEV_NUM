@@ -145,7 +145,7 @@ class World:
         nb_relaxation_iterations : int
             Number of iterations performed to obtain the potential by the relaxation method (default = 1000)
         """
-        #if self._coordinate_system == CoordinateSystem.CARTESIAN:
+        if self._coordinate_system == CoordinateSystem.CARTESIAN:
             self._magnetic_field = BiotSavartEquationSolver()._solve_in_cartesian_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
             #self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_cartesian_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
             #self._electric_field = -np.gradient(self._potential)
