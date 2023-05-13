@@ -45,7 +45,7 @@ class BiotSavartEquationSolver:
         position, current = [], []
         position, current = np.array(position), np.array(current)
         
-        dim_x, dim_y = 6, 6
+        dim_x, dim_y = 101, 101
         magnetic_field = np.zeros((dim_x, dim_y, 3))
     
         for i in range(dim_x):
