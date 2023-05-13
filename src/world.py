@@ -145,18 +145,18 @@ class World:
         nb_relaxation_iterations : int
             Number of iterations performed to obtain the potential by the relaxation method (default = 1000)
         """
-        if self._coordinate_system == CoordinateSystem.CARTESIAN:
-            self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_cartesian_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
-            self._magnetic_field = BiotSavartEquationSolver()._solve_in_cartesian_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
-            self._electric_field = -np.gradient(self._potential)
-            self._energy_flux = 1/mu_0*(np.cross(self._electric_field, self._magnetic_field))
-        elif self._coordinate_system == CoordinateSystem.POLAR:
-            self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_polar_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
-            self._magnetic_field = BiotSavartEquationSolver()._solve_in_polar_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
-            self._electric_field = -np.gradient(self._potential)
-            self._energy_flux = 1/mu_0*(np.cross(self._electric_field, self._magnetic_field))
-        else:
-            raise NotImplementedError("Only the cartesian and polar coordinates solvers are implemented.")
+        #if self._coordinate_system == CoordinateSystem.CARTESIAN:
+            #self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_cartesian_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
+        self._magnetic_field = BiotSavartEquationSolver()._solve_in_cartesian_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
+            #self._electric_field = -np.gradient(self._potential)
+            #self._energy_flux = 1/mu_0*(np.cross(self._electric_field, self._magnetic_field))
+        #elif self._coordinate_system == CoordinateSystem.POLAR:
+            #self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_polar_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
+            #self._magnetic_field = BiotSavartEquationSolver()._solve_in_polar_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
+            #self._electric_field = -np.gradient(self._potential)
+            #self._energy_flux = 1/mu_0*(np.cross(self._electric_field, self._magnetic_field))
+        #else:
+            #raise NotImplementedError("Only the cartesian and polar coordinates solvers are implemented.")
      
 
     def show_circuit(self, nodes_position_in_figure: dict = None):
@@ -178,13 +178,13 @@ class World:
         self._circuit_current.x.show(title="Initial current 'x'")
         self._circuit_current.y.show(title="Initial current 'y'")
 
-    def show_potential(self):
+    #def show_potential(self):
         """
         Shows the electric potential.
         """
-        self._potential.show(title="Potential [V]")
+        #self._potential.show(title="Potential [V]")
 
-    def show_electric_field(self, hide_components: bool = True):
+    #def show_electric_field(self, hide_components: bool = True):
         """
         Shows the electric field.
 
@@ -193,15 +193,15 @@ class World:
         hide_components : bool
             Hide the electric field near the electrical components to produce a clearer stream plot.
         """
-        if hide_components:
-            electric_field = VectorField(self._electric_field)
+        #if hide_components:
+            #electric_field = VectorField(self._electric_field)
 
-            for x, y in zip(np.nonzero(self._circuit_voltage)[0], np.nonzero(self._circuit_voltage)[1]):
-                electric_field[x, y] = np.array([np.nan, np.nan])
-        else:
-            electric_field = self._electric_field
+            #for x, y in zip(np.nonzero(self._circuit_voltage)[0], np.nonzero(self._circuit_voltage)[1]):
+                #electric_field[x, y] = np.array([np.nan, np.nan])
+        #else:
+            #electric_field = self._electric_field
 
-        electric_field.show(title="Electric field [V/m]")
+        #electric_field.show(title="Electric field [V/m]")
 
     def show_magnetic_field(self):
         """
@@ -209,18 +209,18 @@ class World:
         """
         self._magnetic_field.z.show(title="Magnetic field (z component) [T]")
 
-    def show_energy_flux(self):
+    #def show_energy_flux(self):
         """
         Shows the energy flux.
         """
-        self._energy_flux.show(title="Energy flux [W/m²]")
+        #self._energy_flux.show(title="Energy flux [W/m²]")
 
     def show_all(self):
         """
         Shows all fields.
         """
-        self.show_circuit_voltage()
-        self.show_potential()
-        self.show_electric_field()
+        #self.show_circuit_voltage()
+        #self.show_potential()
+        #self.show_electric_field()
         self.show_magnetic_field()
-        self.show_energy_flux()
+        #self.show_energy_flux()
