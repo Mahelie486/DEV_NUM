@@ -51,26 +51,22 @@ class LaplaceEquationSolver:
         # Équivalence x_i, y_i = i*d, j*d
         # potential can be modified, not const_volt
         potential = constant_voltage.copy()
-
+        x, y = constant_voltage.shape
+        # return x, y
+        
         for _ in range(self.nb_iterations):
-
-            # Initialiser une "grille" de 0 sauf au point/position ou potential
-            # On a des noeuds à des distances x et y a un intervalle qui varie == size array variable
+            # On mets à 0 les contour du voltage
             potential = np.pad(potential, (delta_x, delta_y), 'constant', constant_values=0)
-
-            # valeur potentiel selon expression trouvé en 1)
+            # Trace contour autour du potentiel
+            # On calcul le potentiel à un point avec tout ce qui l'entoure
             # nb. vu qu'on a des j-1 et j-2 la valeur de j doit être a une colonne de chaque coté d'un array
             # j-1 max est donc a 2 collonne du bout de l'array pour de j+1 puise exister et ainsi de suite
             potential = (1/4)*(potential[2:, 1:-1] + potential[:-2, 1:-1] + potential[1:-1, :-2] + potential[1:-1, 2:])
 
-
-            # np.copyto(destination_array, src= array from which values are copied,
-            # whatever, where=boolean array, when value is true, then element are copied
-            # from the source to destination )
+            # Si potentiel modifier aux points ou constant
             np.copyto(potential, constant_voltage, where=constant_voltage != 0)
             # ou changement de chaque it est causé puisque potential change dynamiquement
 
-        
         return ScalarField(potential)
 
     def _solve_in_polar_coordinate(

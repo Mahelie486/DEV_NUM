@@ -46,8 +46,8 @@ if __name__ == "__main__":
     world.show_all()
     """
 
-    a, b = circuit.get_voltage_and_current_fields(WORLD_SHAPE, [26,26], [74, 74])
-    print(a)  # a est le volatage en tout point = aussi un scalar
+    a, b = circuit.get_voltage_and_current_fields(WORLD_SHAPE, [60,60], [101, 101])
+    # print(a)  # a est le voltage en tout point = aussi un scalar
     laplace = LaplaceEquationSolver()
-    tests =  laplace._solve_in_cartesian_coordinate(a, 0.01, 0.01)
+    tests =  laplace._solve_in_cartesian_coordinate(a, 1, 1)  # Permet de checker ce qui est retourné par Laplace pour ce circuit
     print(tests)
