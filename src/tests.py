@@ -1,6 +1,8 @@
 
 
 import numpy as np
+
+
   
 """ 
 arr = [1, 3, 2, 5, 4]
@@ -19,16 +21,29 @@ for i in range(2):
         print(f"({i}, {j}): {current_x}, {current_y}")
         position.append([i, j, 0])
 print(position)
-
+print('\n')
 x = np.array([[3, 1, 0], [4, 1, 0], [5, 1, 0]])
+# n = len(x) + 1
 y = np.array([[1, 1, 0], [1, 1, 0], [1, 1, 0]])
-# distance = x- [1, 1, 0]
+# x = np.append([x], [[5, 1, 0]])
+print(x)
+x = np.array(x.tolist() + [[0, 0, 0]])
 
+# distance = x- [1, 0, 0]
+print('\n')
+print(x)
+# (distance)
 
+"""
+print(x)
 # r_norm = (np.linalg.norm(distance, axis=1)) # yields float
 (print('\n'))
-print(np.cross(x, y))
+# print(np.cross(x, y))
 z = np.cross(x, y)
-print(z.shape)
+print(z)
+(print('\n'))
 print(np.array(z[:, 2]))
+z[:, 2] = [0, 0, 0]
+print(z)
 # print(np.sum(z))
+"""
