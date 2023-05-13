@@ -44,7 +44,6 @@ class BiotSavartEquationSolver:
 
         position, current = [], []
         position, current = np.array(position), np.array(current)
-        test_bio = []
         
         dim_x, dim_y = 101, 101
         magnetic_field = np.zeros((dim_x, dim_y, 3))
@@ -58,7 +57,6 @@ class BiotSavartEquationSolver:
                     current = np.array(current.tolist() + [[current_x, current_y, 0]])
                     
                 if current_x == 0 and current_y == 0:
-                # if [i, j, 0] not in position:
                     distance = position - [i, j, 0]
                     r_norm = (np.linalg.norm(distance, axis=1))
                     cross_part = np.cross(current, distance)[:, 2]
@@ -104,29 +102,38 @@ class BiotSavartEquationSolver:
             B_θ += (mu_0*electric_current / 4*pi) * (np.sin(delta_theta))/(delta_r**2 + delta_theta**2)
         return VectorField(magnetic_field)
         """
-        # On convertit les coordonnées polaires et les deltas en catésien
-        # extrait dimensions de matrice
         position, current = [], []
-        dim_r, dim_thet = electric_current.shape
-        magnetic_field = np.zeros((dim_r, dim_thet))
-        # remplace intégration en couvrant espaces en bond de delta
-        for i in range(0, dim_r, delta_r):
-            for j in range(0, dim_thet, delta_theta):
-                current_r, current_theta = electric_current[i, j][0], electric_current[i, j][1]
-                # current_x = electric_current[i, j][0]*math.cos(electric_current[i, j][1])
-                # current_y = electric_current[i, j][0]*math.sin(electric_current[i, j][1])
+        position, current = np.array(position), np.array(current)
+        
+        dim_r, dim_theta = 101, 101
+        magnetic_field = np.zeros((dim_r, dim_theta, 3))
+    
+        for i in range(dim_r):
+            for j in range(dim_theta):
+                current_r, current_theta= electric_current[i][j][0], electric_current[i][j][1]
+                
                 if current_r != 0 or current_theta != 0:
-                    position.append((i, j))
-                    current.append(i)
-                if (i, j) not in position:  # 0 if in pos et initialized with 0s
-                    # distance (from all current elements?)
-                    r = np.array([4, 4])  # Besoin de faire diff the dist avec chaque élément de courant
-                    r_norm = (np.linalg.norm(r, axis=1))
-                    # portion perpendiculaire(champs perpendiculaire au courant)
-                    cross_part = np.cross(current, r)
-                    # Calcul biot savard: sum de tout élément champs rpl int.
-                    magnetic_field[i, j] = [0, 0, np.sum(mu_0 * cross_part[:,2]/(4*pi*r_norm*3))]
+                    position = np.array(position.tolist() + [[i, j, 0]])
+                    current = np.array(current.tolist() + [[current_r, current_theta, 0]])
+                    
+                if current_r == 0 and current_theta == 0:
+                    # Le reste doit être modifié
+                    # distance
+                    r_1 = i
+                    r_2 = position[:, 0]  # Matrice ordre 1
+                    diff_theta = j - position[:, 1]
+                    distance = np.sqrt(r_1**2 + r_2**2 - 2*r_1*r_2*np.cos(diff_theta))  # matrice de distance avec tte el. courant, on perd l'aspect vectoriel en perdant theta
+                    # distance n'est plus un vecteur donc opération impossible
+                    r_norm = (np.linalg.norm(distance, axis=1))
+                    # distance n'est plus un vecteur donc op. impossible
+                    cross_part = np.cross(current, distance)[:, 2]
+                    # Probably okay?
+                    champs_bio = np.sum(mu_0 * cross_part/(4*pi*r_norm*3))
+                    # Ne change pas
+                    magnetic_field[i][j][2] = champs_bio
         return VectorField(magnetic_field)
+
+
     def solve(
             self,
             electric_current: VectorField,

@@ -1,6 +1,7 @@
 
 
 import numpy as np
+from math import sqrt, cos, pi
 
 
   
@@ -22,7 +23,34 @@ for i in range(2):
         position.append([i, j, 0])
 print(position)
 print('\n')
+"""
 x = np.array([[3, 1, 0], [4, 1, 0], [5, 1, 0]])
+r_2 = x[:, 0]
+r_1 = 2
+
+
+diff_theta = pi/3 - x[:, 1]  # pi/3 = angle j
+dist_carré = r_1**2 + r_2**2 - 2*r_1*r_2*np.cos(diff_theta)
+distance = np.sqrt(dist_carré)
+print(distance)
+r_norm = (np.linalg.norm(distance, axis=0))
+print(r_norm)
+y = [2, 2, 2]
+# y = np.array([y[0]**2, y[1]**2, y[2]**2])
+# (x**2)
+
+# print('a')
+yy = np.array([y[0]**2, y[1]**2, y[2]**2])
+# x[i] == 
+dist_carré = y[0]**2 + x[0]**2
+
+#print(dist)
+
+
+
+
+
+"""
 # n = len(x) + 1
 y = np.array([[1, 1, 0], [1, 1, 0], [1, 1, 0]])
 # x = np.append([x], [[5, 1, 0]])
@@ -46,7 +74,7 @@ print(np.array(z[:, 2]))
 z[:, 2] = [0, 0, 0]
 print(z)
 # print(np.sum(z))
-"""
+
 dim_x, dim_y = 4, 4
 magnetic_field = np.zeros((dim_x, dim_y, 3))
 print(magnetic_field)
@@ -60,3 +88,4 @@ for i in range(4):
     for j in range(4):
         magnetic_field[i][j][2] = 2
 print(magnetic_field)
+"""
