@@ -6,6 +6,8 @@ from src import Circuit, CoordinateSystem, VoltageSource, Wire, World
 
 from src.laplace_equation_solver import LaplaceEquationSolver
 
+from src.biot_savart_equation_solver import BiotSavartEquationSolver
+
 import numpy as np
 
 if __name__ == "__main__":
@@ -62,6 +64,13 @@ if __name__ == "__main__":
     """
     a, b = circuit.get_voltage_and_current_fields(WORLD_SHAPE, [60,60], [101, 101])
     # print(a)  # a est le voltage en tout point = aussi un scalar
+    """
     laplace = LaplaceEquationSolver()
-    # tests =  laplace._solve_in_polar_coordinate(a, 1, 1)  # Permet de checker ce qui est retourné par Laplace pour ce circuit
-    print(b)
+    tests =  laplace._solve_in_polar_coordinate(a, 1, 1)  # Permet de checker ce qui est retourné par Laplace pour ce circuit
+    print(tests)
+    """
+    Biot = BiotSavartEquationSolver()
+    # print(len(b[0]))
+    # print(b)
+    Magn =  Biot._solve_in_polar_coordinate(b, 1, 1)  # Permet de checker ce qui est retourné par Laplace pour ce circuit
+    print(Magn)

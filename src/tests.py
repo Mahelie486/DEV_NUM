@@ -30,9 +30,22 @@ r_1 = 2
 
 
 diff_theta = pi/3 - x[:, 1]  # pi/3 = angle j
+print(diff_theta)
 dist_carré = r_1**2 + r_2**2 - 2*r_1*r_2*np.cos(diff_theta)
 distance = np.sqrt(dist_carré)
 print(distance)
+z = distance.copy()
+z.fill(0)
+print(z)
+print(diff_theta.shape, distance.shape, z.shape)
+combined = np.vstack((distance, diff_theta, z))
+print(combined)
+# print(diff_theta)
+# print(distance)
+# current = np.array([[1, 1, 0], [1, 1, 0], [1, 1, 0]])
+# test = np.cross(current, [distance, diff_theta, 0])
+
+"""
 r_norm = (np.linalg.norm(distance, axis=0))
 print(r_norm)
 y = [2, 2, 2]
@@ -45,7 +58,7 @@ yy = np.array([y[0]**2, y[1]**2, y[2]**2])
 dist_carré = y[0]**2 + x[0]**2
 
 #print(dist)
-
+"""
 
 
 

@@ -61,7 +61,7 @@ class BiotSavartEquationSolver:
                     r_norm = (np.linalg.norm(distance, axis=1))
                     cross_part = np.cross(current, distance)[:, 2]
                     
-                    champs_bio = np.sum(mu_0 * cross_part/(4*pi*r_norm*3))
+                    champs_bio = np.sum(mu_0 * cross_part/(4*pi*r_norm**3))
                     magnetic_field[i][j][2] = champs_bio
         return VectorField(magnetic_field)
 
@@ -105,7 +105,7 @@ class BiotSavartEquationSolver:
         position, current = [], []
         position, current = np.array(position), np.array(current)
         
-        dim_r, dim_theta = 101, 101
+        dim_r, dim_theta = 10, 10
         magnetic_field = np.zeros((dim_r, dim_theta, 3))
     
         for i in range(dim_r):
@@ -114,21 +114,21 @@ class BiotSavartEquationSolver:
                 
                 if current_r != 0 or current_theta != 0:
                     position = np.array(position.tolist() + [[i, j, 0]])
-                    current = np.array(current.tolist() + [[current_r, current_theta, 0]])
+                    current = np.array(current.tolist() + [[current_r, current_theta]])
                     
                 if current_r == 0 and current_theta == 0:
-                    # Le reste doit être modifié
                     # distance
                     r_1 = i
-                    r_2 = position[:, 0]  # Matrice ordre 1
-                    diff_theta = j - position[:, 1]
-                    distance = np.sqrt(r_1**2 + r_2**2 - 2*r_1*r_2*np.cos(diff_theta))  # matrice de distance avec tte el. courant, on perd l'aspect vectoriel en perdant theta
-                    # distance n'est plus un vecteur donc opération impossible
-                    r_norm = (np.linalg.norm(distance, axis=1))
-                    # distance n'est plus un vecteur donc op. impossible
-                    cross_part = np.cross(current, distance)[:, 2]
-                    # Probably okay?
-                    champs_bio = np.sum(mu_0 * cross_part/(4*pi*r_norm*3))
+                    r_2 = position[:, 0]
+                    diff_theta = j - position[:, 1]  # vecteur direction
+                    # Cause une division par 0 à qql part ici, bref des 0 dans distance mais devrait pas en avoir avec la condition initial
+                    distance_sca = np.sqrt(r_1**2 + r_2**2 - 2*r_1*r_2*np.cos(diff_theta))  # matrice de distance avec tte el. courant, on perd l'aspect vectoriel en perdant theta
+                    # B_z = distance_sca.copy()
+                    # B_z.fill(0)
+                    # dist_vect = np.vstack((distance_sca, diff_theta, B_z))
+                    dist_vect = np.vstack((distance_sca, diff_theta))
+                    cross_part = np.cross(current, np.transpose(dist_vect))  # [:, 2]
+                    champs_bio = np.sum(mu_0 * cross_part/(4*pi*distance_sca**3))
                     # Ne change pas
                     magnetic_field[i][j][2] = champs_bio
         return VectorField(magnetic_field)
