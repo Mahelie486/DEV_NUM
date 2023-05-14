@@ -4,7 +4,15 @@ import numpy as np
 from math import sqrt, cos, pi
 
 
-  
+# Début tests Laplace
+
+a = np.array([[ 1.,  1.,  1.,  1.,  1.],[ 1.,  1.,  1.,  1.,  1.], [ 1.,  1.,  1.,  1.,  1.]])
+print(a.shape)
+b = np.pad(a, [(1, 1), (1, 1)], mode='constant')
+print(b.shape)
+print(b)
+
+# Début tests Biot-Savart  
 """ 
 arr = [1, 3, 2, 5, 4]
   
@@ -23,7 +31,7 @@ for i in range(2):
         position.append([i, j, 0])
 print(position)
 print('\n')
-"""
+
 x = np.array([[3, 1, 0], [4, 1, 0], [5, 1, 0]])
 r_2 = x[:, 0]
 r_1 = 2
@@ -45,7 +53,7 @@ print(combined)
 # current = np.array([[1, 1, 0], [1, 1, 0], [1, 1, 0]])
 # test = np.cross(current, [distance, diff_theta, 0])
 
-"""
+
 r_norm = (np.linalg.norm(distance, axis=0))
 print(r_norm)
 y = [2, 2, 2]

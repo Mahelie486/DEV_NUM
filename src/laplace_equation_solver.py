@@ -48,16 +48,17 @@ class LaplaceEquationSolver:
             the electrical components and in the empty space between the electrical components, while the field V
             always gives V(x, y) = 0 if (x, y) is not a point belonging to an electrical component of the circuit.
         """
-        # Équivalence x_i, y_i = i*d, j*d
-        # potential can be modified, not const_volt
+
         potential = constant_voltage.copy()
-        x, y = constant_voltage.shape
-        # return x, y
-        
+        # Potentiel has size of World_Shape
         for _ in range(self.nb_iterations):
-            for j in range(1, x - 1):
-                for i in range(1, y -1):
-                    potential[i][j] = 1/4*(potential[j+1][i] + potential[j-1][i] + potential[j][i + 1] + potential[j][i - 1])
+
+
+            potential = np.pad(potential,[(1, 1), (1, 1)], mode='constant')
+
+            potential = 1/4 * (potential[:-2, 1:-1] + potential[2:, 1:-1] + potential[1:-1, :-2] + potential[1:-1, 2:])
+            np.copyto(potential, constant_voltage, where=constant_voltage != 0)
+            
         return ScalarField(potential)
 
     def _solve_in_polar_coordinate(
