@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     circuit = Circuit(wires, ground_position)
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.POLAR, shape=WORLD_SHAPE)
-    """"
+    
     world.show_circuit(
         {0: (60, theta_1),
         1: (74, theta_1),
@@ -74,3 +74,4 @@ if __name__ == "__main__":
     # print(b)
     #Magn =  Biot._solve_in_polar_coordinate(b, 1, 1)  # Permet de checker ce qui est retourné par Laplace pour ce circuit
     #print(Magn)
+    """
