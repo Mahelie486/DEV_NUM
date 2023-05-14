@@ -42,10 +42,9 @@ class BiotSavartEquationSolver:
         """nb, le courent est donné dans une liste du genre [[[I_x, I_y]]]
         pour mettons juste une position x, y, donc avec electric_current[pos_x][pos_y][0 ou 1 pour I_x et I_y]"""
 
-        position, current = [], []
-        position, current = np.array(position), np.array(current)
+        position, current = np.array([]), np.array([])
         
-        dim_x, dim_y = 101, 101
+        dim_x, dim_y = 101, 101  # On ne va pas chercher shape mais dimension de World_Shape
         magnetic_field = np.zeros((dim_x, dim_y, 3))
     
         for i in range(dim_x):
@@ -105,41 +104,46 @@ class BiotSavartEquationSolver:
             B_θ += (mu_0*electric_current / 4*pi) * (np.sin(delta_theta))/(delta_r**2 + delta_theta**2)
         return VectorField(magnetic_field)
         """
-        position, current = [], []
-        position, current = np.array(position), np.array(current)
-        
+        position, current = np.array([]), np.array([])
+
+        # Nb. Les dimension de World Shape ont été ajouté manuellement
         dim_r, dim_theta = 101, 101
+
+        # on initialise une matrice 3D de 0 pour le champs magnétique
         magnetic_field = np.zeros((dim_r, dim_theta, 3))
     
+        # On isole les positions qui formest le contour du fils ainsi que le courant qui s'y trouve
         for i in range(dim_r):
             for j in range(dim_theta):
                 current_r, current_theta= electric_current[i][j][0], electric_current[i][j][1]
-                
                 if current_r != 0 or current_theta != 0:
                     position = np.array(position.tolist() + [[i, j, 0]])
                     current = np.array(current.tolist() + [[current_r, current_theta]])
+
+        # Trouver champs en tous points de l'espace
         for i in range(dim_r):
             for j in range(dim_theta):
+
+                # Vérifier qu'il n'y a pas de courant à la position
                 current_r, current_theta= electric_current[i][j][0], electric_current[i][j][1]
                 if current_r == 0 and current_theta == 0:
-                    # distance
+
+                    # Distance entre position actuelle et tous les éléments de courants
                     r_1 = i
                     r_2 = position[:, 0]
-                    diff_theta = j - position[:, 1]  # vecteur direction
-                    # Cause une division par 0 à qql part ici, bref des 0 dans distance mais devrait pas en avoir avec la condition initial
-                    distance_sca = np.sqrt(r_1**2 + r_2**2 - 2*r_1*r_2*np.cos(diff_theta))  # matrice de distance avec tte el. courant, on perd l'aspect vectoriel en perdant theta
-                 
-                    # B_z = distance_sca.copy()
-                    # B_z.fill(0)
-                    # dist_vect = np.vstack((distance_sca, diff_theta, B_z))
-                    dist_vect = np.vstack((distance_sca, diff_theta))
-                    cross_part = np.cross(current, np.transpose(dist_vect))  # [:, 2]
-                    champs_bio = np.sum(mu_0 * cross_part/(4*pi*4**3))
-                    # Ne change pas
-                    magnetic_field[i][j][2] = champs_bio
-        return VectorField(magnetic_field)
+                    diff_theta = j - position[:, 1]
+                    distance_sca = np.sqrt(r_1**2 + r_2**2 - 2*r_1*r_2*np.cos(diff_theta))
 
-        # return distance_sca 
+                    # Calcul du champs avec Biot-Savard avec le cross product du courant et vecteur r
+                    # en tout point puis la somme de toute les contributions en un point
+                    dist_vect = np.vstack((distance_sca, diff_theta))
+                    cross_part = np.cross(current, np.transpose(dist_vect))
+                    champs_bio = np.sum(mu_0 * cross_part/(4*pi*4**3))
+    
+                    # Substitution du champs à chaque point dans la matrice de tout l'espace
+                    magnetic_field[i][j][2] = champs_bio
+
+        return VectorField(magnetic_field)
 
 
     def solve(
