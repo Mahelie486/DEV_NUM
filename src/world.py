@@ -176,11 +176,11 @@ class World:
         self._circuit_current.x.show(title="Initial current 'x'")
         self._circuit_current.y.show(title="Initial current 'y'")
 
-    #def show_potential(self):
+    def show_potential(self):
         """
         Shows the electric potential.
         """
-        #self._potential.show(title="Potential [V]")
+        self._potential.show(title="Potential [V]")
 
     #def show_electric_field(self, hide_components: bool = True):
         """
@@ -218,7 +218,7 @@ class World:
         Shows all fields.
         """
         #self.show_circuit_voltage()
-        #self.show_potential()
+        self.show_potential()
         #self.show_electric_field()
         self.show_magnetic_field()
         #self.show_energy_flux()

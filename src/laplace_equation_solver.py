@@ -55,18 +55,9 @@ class LaplaceEquationSolver:
         # return x, y
         
         for _ in range(self.nb_iterations):
-            # On mets à 0 les contour du voltage
-            potential = np.pad(potential, (delta_x, delta_y), 'constant', constant_values=0)
-            # Trace contour autour du potentiel
-            # On calcul le potentiel à un point avec tout ce qui l'entoure
-            # nb. vu qu'on a des j-1 et j-2 la valeur de j doit être a une colonne de chaque coté d'un array
-            # j-1 max est donc a 2 collonne du bout de l'array pour de j+1 puise exister et ainsi de suite
-            potential = (1/4)*(potential[2:, 1:-1] + potential[:-2, 1:-1] + potential[1:-1, :-2] + potential[1:-1, 2:])
-
-            # Si potentiel modifier aux points ou constant
-            np.copyto(potential, constant_voltage, where=constant_voltage != 0)
-            # ou changement de chaque it est causé puisque potential change dynamiquement
-
+            for j in range(1, x - 1):
+                for i in range(1, y -1):
+                    potential[i][j] = 1/4*(potential[j+1][i] + potential[j-1][i] + potential[j][i + 1] + potential[j][i - 1])
         return ScalarField(potential)
 
     def _solve_in_polar_coordinate(
