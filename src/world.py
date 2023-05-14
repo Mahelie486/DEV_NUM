@@ -146,13 +146,13 @@ class World:
             Number of iterations performed to obtain the potential by the relaxation method (default = 1000)
         """
         if self._coordinate_system == CoordinateSystem.CARTESIAN:
-            self._magnetic_field = BiotSavartEquationSolver()._solve_in_cartesian_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
-            #self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_cartesian_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
+            #self._magnetic_field = BiotSavartEquationSolver()._solve_in_cartesian_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
+            self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_cartesian_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
             #self._electric_field = -np.gradient(self._potential)
             #self._energy_flux = 1/mu_0*(np.cross(self._electric_field, self._magnetic_field))
         elif self._coordinate_system == CoordinateSystem.POLAR:
-            self._magnetic_field = BiotSavartEquationSolver()._solve_in_polar_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
-            #self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_polar_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
+            #self._magnetic_field = BiotSavartEquationSolver()._solve_in_polar_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
+            self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_polar_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
             #self._electric_field = -np.gradient(self._potential)
             #self._energy_flux = 1/mu_0*(np.cross(self._electric_field, self._magnetic_field))
      
@@ -201,11 +201,11 @@ class World:
 
         #electric_field.show(title="Electric field [V/m]")
 
-    def show_magnetic_field(self):
+    #def show_magnetic_field(self):
         """
         Shows the z-component of the magnetic field.
         """
-        self._magnetic_field.z.show(title="Magnetic field (z component) [T]")
+        #self._magnetic_field.z.show(title="Magnetic field (z component) [T]")
 
     #def show_energy_flux(self):
         """
