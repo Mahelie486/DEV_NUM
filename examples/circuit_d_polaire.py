@@ -8,7 +8,7 @@ from src.laplace_equation_solver import LaplaceEquationSolver
 
 from src.biot_savart_equation_solver import BiotSavartEquationSolver
 
-from numpy import pi
+import numpy as np
 
 if __name__ == "__main__":
     WORLD_SHAPE = (101, 101)
@@ -31,30 +31,33 @@ if __name__ == "__main__":
     theta_expression_diagonal = theta
     diagonal_eqs = (r_expression_diagonal, theta_expression_diagonal)
 
+    theta_1 = np.pi / 24
+    theta_2 = np.pi / 3
+
     wires = [
-        Wire((20, pi / 24), (80, pi / 24), horizontal_eqs, polar_variables, LOW_WIRE_RESISTANCE),
-        Wire((80, pi / 24), (80, pi/7), vertical_eqs, polar_variables, LOW_WIRE_RESISTANCE),
-        Wire((80, pi/7), (80, 2*pi/9), vertical_eqs, polar_variables, HIGH_WIRE_RESISTANCE),
-        Wire((80, 2*pi/9), (80, pi / 3), vertical_eqs, polar_variables, LOW_WIRE_RESISTANCE),
-        Wire((80, pi / 3), (20, pi / 3), horizontal_eqs, polar_variables, LOW_WIRE_RESISTANCE),
-        Wire((20, pi / 3), (20, 2*pi/9), vertical_eqs, polar_variables, LOW_WIRE_RESISTANCE),
-        VoltageSource((20, 2*pi/9), (20, pi/7), vertical_eqs, polar_variables, BATTERY_VOLTAGE),
-        Wire((20, pi/7), (20, pi / 24), vertical_eqs, polar_variables, LOW_WIRE_RESISTANCE),
+        Wire((20, theta_1), (80, theta_1), horizontal_eqs, polar_variables, LOW_WIRE_RESISTANCE),
+        Wire((80, theta_1), (80, np.pi/7), vertical_eqs, polar_variables, LOW_WIRE_RESISTANCE),
+        Wire((80, np.pi/7), (80, 2*np.pi/9), vertical_eqs, polar_variables, HIGH_WIRE_RESISTANCE),
+        Wire((80, 2*np.pi/9), (80, theta_2), vertical_eqs, polar_variables, LOW_WIRE_RESISTANCE),
+        Wire((80, theta_2), (20, theta_2), horizontal_eqs, polar_variables, LOW_WIRE_RESISTANCE),
+        Wire((20, theta_2), (20, 2*np.pi/9), vertical_eqs, polar_variables, LOW_WIRE_RESISTANCE),
+        VoltageSource((20, 2*np.pi/9), (20, np.pi/7), vertical_eqs, polar_variables, BATTERY_VOLTAGE),
+        Wire((20, np.pi/7), (20, theta_1), vertical_eqs, polar_variables, LOW_WIRE_RESISTANCE),
     ]
-    ground_position = (20, pi/7)
+    ground_position = (20, np.pi/7)
 
     circuit = Circuit(wires, ground_position)
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.POLAR, shape=WORLD_SHAPE)
     
     world.show_circuit(
-        {0: (20, pi / 24),
-        1: (80, pi / 24),
-        2: (80, pi/7),
-        3: (80, 2*pi/9), 
-        4: (80, pi / 3), 
-        5: (20, pi / 3), 
-        6: (20, 2*pi/9),
-        7: (20, pi/7)}
+        {0: (20, theta_1),
+        1: (80, theta_1),
+        2: (80, np.pi/7),
+        3: (80, 2*np.pi/9), 
+        4: (80, theta_2), 
+        5: (20, theta_2), 
+        6: (20, 2*np.pi/9),
+        7: (20, np.pi/7)}
     )
     world.compute()
     world.show_all()
