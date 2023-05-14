@@ -111,7 +111,8 @@ class LaplaceEquationSolver:
             A_1 = (1/(2*M) + (r_carré * pi**2 / (8*M)))
             A_2 = (1/sqrt(r_carré) + pi**2 * sqrt(r_carré)/ (4*M**2))
             A_3 = (1/2 + 2 * M**2 / (r_carré * pi**2))
-            potential = (A_1)(potential[:-2, 1:-1] + potential[2:, 1:-1]) +(A_2)(potential[2:, 1:-1] - potential[:-2, 1:-1]) + (A_3)(potential[1:-1, :-2] + potential[1:-1, 2:])
+            # Manque constantes
+            potential = (potential[:-2, 1:-1] + potential[2:, 1:-1]) +(potential[2:, 1:-1] - potential[:-2, 1:-1]) + (potential[1:-1, :-2] + potential[1:-1, 2:])
 
             np.copyto(potential, constant_voltage, where=constant_voltage != 0)
             return ScalarField(potential)
