@@ -182,7 +182,7 @@ class World:
         """
         self._potential.show(title="Potential [V]")
 
-    #def show_electric_field(self, hide_components: bool = True):
+    def show_electric_field(self, hide_components: bool = True):
         """
         Shows the electric field.
 
