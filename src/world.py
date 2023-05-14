@@ -144,15 +144,25 @@ class World:
         nb_relaxation_iterations : int
             Number of iterations performed to obtain the potential by the relaxation method (default = 1000)
         """
+        #calcul en coordonnées cartésiennes 
         if self._coordinate_system == CoordinateSystem.CARTESIAN:
+            #calcul du champ magnétique
             self._magnetic_field = BiotSavartEquationSolver()._solve_in_cartesian_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
+            #calcul du potentiel
             self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_cartesian_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
+            #calcul du champ électrique
             self._electric_field = -self._potential.gradient()
+            #calcul du flux d'énergie et du vecteur Poynting
             self._energy_flux = 1/mu_0*(self._electric_field.cross(self._magnetic_field))
+        #calcul en coordonnées polaires
         elif self._coordinate_system == CoordinateSystem.POLAR:
+            #calcul du champ magnétique
             self._magnetic_field = BiotSavartEquationSolver()._solve_in_polar_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
+            #calcul du potentiel
             self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_polar_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
+            #calcul du champ électrique
             self._electric_field = -self._potential.gradient()
+            #calcul du flux d'énergie et du vecteur Poynting
             self._energy_flux = 1/mu_0*(self._electric_field.cross(self._magnetic_field))
      
 
