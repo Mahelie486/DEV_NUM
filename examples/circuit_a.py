@@ -43,7 +43,7 @@ if __name__ == "__main__":
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.CARTESIAN, shape=WORLD_SHAPE)
     
     world.show_circuit(
-        {0: (0, 0), 1: (0, 100), 2: (60, 100), 3: (80, 100), 4: (100, 100), 5: (100, 40), 6: (100, 20), 7: (100, 0), 8: (40, 0), 9: (20, 0)}
+        {0: (10, 10), 1: (10, 90), 2: (58, 90), 3: (74, 90), 4: (90, 90), 5: (90, 42), 6: (90, 26), 7: (90, 10), 8: (42, 10), 9: (26, 10)}
     )
     world.compute()
     world.show_all()
