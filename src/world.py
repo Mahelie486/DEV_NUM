@@ -146,15 +146,15 @@ class World:
             Number of iterations performed to obtain the potential by the relaxation method (default = 1000)
         """
         if self._coordinate_system == CoordinateSystem.CARTESIAN:
-            #self._magnetic_field = BiotSavartEquationSolver()._solve_in_cartesian_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
+            self._magnetic_field = BiotSavartEquationSolver()._solve_in_cartesian_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
             self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_cartesian_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
-            #self._electric_field = -np.gradient(self._potential)
-            #self._energy_flux = 1/mu_0*(np.cross(self._electric_field, self._magnetic_field))
+            self._electric_field = -self._potential.gradient()
+            self._energy_flux = 1/mu_0*(self._electric_field.cross(self._magnetic_field))
         elif self._coordinate_system == CoordinateSystem.POLAR:
-            #self._magnetic_field = BiotSavartEquationSolver()._solve_in_polar_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
+            self._magnetic_field = BiotSavartEquationSolver()._solve_in_polar_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
             self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_polar_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
-            #self._electric_field = -np.gradient(self._potential)
-            #self._energy_flux = 1/mu_0*(np.cross(self._electric_field, self._magnetic_field))
+            self._electric_field = -np.gradient(self._potential)
+            self._energy_flux = 1/mu_0*(self._electric_field.cross(self._magnetic_field))
      
 
     def show_circuit(self, nodes_position_in_figure: dict = None):
@@ -191,34 +191,34 @@ class World:
         hide_components : bool
             Hide the electric field near the electrical components to produce a clearer stream plot.
         """
-        #if hide_components:
-            #electric_field = VectorField(self._electric_field)
+        if hide_components:
+            electric_field = VectorField(self._electric_field)
 
-            #for x, y in zip(np.nonzero(self._circuit_voltage)[0], np.nonzero(self._circuit_voltage)[1]):
-                #electric_field[x, y] = np.array([np.nan, np.nan])
-        #else:
-            #electric_field = self._electric_field
+            for x, y in zip(np.nonzero(self._circuit_voltage)[0], np.nonzero(self._circuit_voltage)[1]):
+                electric_field[x, y] = np.array([np.nan, np.nan])
+        else:
+            electric_field = self._electric_field
 
-        #electric_field.show(title="Electric field [V/m]")
+        electric_field.show(title="Electric field [V/m]")
 
-    #def show_magnetic_field(self):
+    def show_magnetic_field(self):
         """
         Shows the z-component of the magnetic field.
         """
-        #self._magnetic_field.z.show(title="Magnetic field (z component) [T]")
+        self._magnetic_field.z.show(title="Magnetic field (z component) [T]")
 
-    #def show_energy_flux(self):
+    def show_energy_flux(self):
         """
         Shows the energy flux.
         """
-        #self._energy_flux.show(title="Energy flux [W/m²]")
+        self._energy_flux.show(title="Energy flux [W/m²]")
 
     def show_all(self):
         """
         Shows all fields.
         """
-        #self.show_circuit_voltage()
+        self.show_circuit_voltage()
         self.show_potential()
-        #self.show_electric_field()
+        self.show_electric_field()
         self.show_magnetic_field()
-        #self.show_energy_flux()
+        self.show_energy_flux()
