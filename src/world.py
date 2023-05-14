@@ -8,6 +8,8 @@ from src.coordinate_and_position import CoordinateSystem, Position
 from src.fields import VectorField
 from src.laplace_equation_solver import LaplaceEquationSolver
 
+import numpy as np
+
 
 class World:
     """

@@ -4,7 +4,6 @@ from sympy import Symbol
 
 from src import Circuit, CoordinateSystem, VoltageSource, Wire, World
 
-from src.laplace_equation_solver import LaplaceEquationSolver
 
 if __name__ == "__main__":
     WORLD_SHAPE = (101, 101)
