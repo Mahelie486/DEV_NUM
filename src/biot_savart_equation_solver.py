@@ -1,5 +1,5 @@
 import numpy as np
-import math
+
 from scipy.constants import mu_0, pi
 
 from src.coordinate_and_position import CoordinateSystem
@@ -32,38 +32,55 @@ class BiotSavartEquationSolver:
             B_z(x, y) are the 3 components of the magnetic vector at a given point (x, y) in space. Note that
             B_x = B_y = 0 is always True in our 2D world.
         """
-    # Version préliminaire manque méthode pour aller chercher distance du point avec el.courant
+
     def _solve_in_cartesian_coordinate(
     self,
     electric_current: VectorField,
     delta_x: float,
      delta_y: float
     ) -> VectorField:
-        """nb, le courent est donné dans une liste du genre [[[I_x, I_y]]]
-        pour mettons juste une position x, y, donc avec electric_current[pos_x][pos_y][0 ou 1 pour I_x et I_y]"""
+        """
+        Les delta x et y n'ont pas été utilié puisque ils sont de 1 pour tous les circuits.
+        La fonction range parcours déjà automatiquement les position données en bond de 1.
+
+        A.M.
+        """
 
         position, current = np.array([]), np.array([])
         
-        dim_x, dim_y = 101, 101  # On ne va pas chercher shape mais dimension de World_Shape
+        # Les dimensions de World_Shape sont directement utilisé
+        dim_x, dim_y = 101, 101
+
+        # on initialise une matrice 3D de 0 pour le champs magnétique
         magnetic_field = np.zeros((dim_x, dim_y, 3))
-    
+
+        # On isole les positions qui forment le contour du fils ainsi que le courant qui s'y trouve
         for i in range(dim_x):
             for j in range(dim_y):
                 current_x, current_y= electric_current[i][j][0], electric_current[i][j][1]
-                
                 if current_x != 0 or current_y != 0:
+
+                    # S'il y a en effet un courant à cette position, on l'inclus aux listes décrivant le contour
                     position = np.array(position.tolist() + [[i, j, 0]])
                     current = np.array(current.tolist() + [[current_x, current_y, 0]])
 
+        # Trouver champs en tous points de l'espace
         for i in range(dim_x):
             for j in range(dim_y):
-                current_x, current_y= electric_current[i][j][0], electric_current[i][j][1]            
+                current_x, current_y= electric_current[i][j][0], electric_current[i][j][1]
+
+                # On vérifie que la position (i, j) n'est pas un élément de courant 
                 if current_x == 0 and current_y == 0:
+
+                    # Si pas un élément de courant, on trouve distance avec tous éléments de courants
                     distance = position - [i, j, 0]
                     r_norm = (np.linalg.norm(distance, axis=1))
                     cross_part = np.cross(current, distance)[:, 2]
                     
+                    # Somme du champs magnétique causé par tous éléments de courants au point (i, j)
                     champs_bio = np.sum(mu_0 * cross_part/(4*pi*r_norm**3))
+
+                    # Intégration du champs magnétique au point (i, j) à la matrice avec tous les points de l'espace
                     magnetic_field[i][j][2] = champs_bio
         return VectorField(magnetic_field)
 
@@ -94,15 +111,6 @@ class BiotSavartEquationSolver:
             A vector field B : ℝ² → ℝ³ ; (r, θ) → (B_r(r, θ), B_θ(r, θ), B_z(r, θ)), where B_r(r, θ), B_θ(r, θ) and
             B_z(r, θ) are the 3 components of the magnetic vector at a given point (r, θ) in space. Note that
             B_r = B_θ = 0 is always True in our 2D world.
-        
-        B_r = 0
-        B_θ = 0
-        magnetic_field = np.array([B_r, B_θ])
-        
-        for i in range(self.nb_iterations):
-            B_r += (mu_0*electric_current / 4*pi) * (delta_r*np.cos(delta_theta))/(delta_r**2 + delta_theta**2)
-            B_θ += (mu_0*electric_current / 4*pi) * (np.sin(delta_theta))/(delta_r**2 + delta_theta**2)
-        return VectorField(magnetic_field)
         """
         position, current = np.array([]), np.array([])
 
@@ -140,7 +148,7 @@ class BiotSavartEquationSolver:
                     cross_part = np.cross(current, np.transpose(dist_vect))
                     champs_bio = np.sum(mu_0 * cross_part/(4*pi*4**3))
     
-                    # Substitution du champs à chaque point dans la matrice de tout l'espace
+                    # Substitution du champs à chaque point (i, j) dans la matrice de tout l'espace
                     magnetic_field[i][j][2] = champs_bio
 
         return VectorField(magnetic_field)
