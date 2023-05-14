@@ -3,6 +3,8 @@ import numpy as np
 from src.coordinate_and_position import CoordinateSystem
 from src.fields import ScalarField
 
+from math import pi, sqrt
+
 
 class LaplaceEquationSolver:
     """
@@ -53,7 +55,7 @@ class LaplaceEquationSolver:
         # Potentiel has size of World_Shape
         for _ in range(self.nb_iterations):
 
-
+            # pourrais remplacer les 1 par les deltas
             potential = np.pad(potential,[(1, 1), (1, 1)], mode='constant')
 
             potential = 1/4 * (potential[:-2, 1:-1] + potential[2:, 1:-1] + potential[1:-1, :-2] + potential[1:-1, 2:])
@@ -90,12 +92,26 @@ class LaplaceEquationSolver:
         """
 
         potential = constant_voltage.copy()
+        # Trouver delta_theta
+        # (plus facile qu'utiliser lui de la fomction même si moins rapide)
+        
+        N, M = constant_voltage.shape
+        # delta_theta = pi/(2*M) but not useful with direct substitution in eqn
+        # Note to self
+        # r - 1 = potential[:-2, 1:-1]
+        # r + 1 = potential[2:, 1:-1]
+        # theta + 1 = potential[1:-1, :-2]  # plus 1 = plus 1 delta, possible avec it.? 
+        # theta - 1 = potential[1:-1, 2:]
 
         for i in range(self.nb_iterations):
 
-            potential = np.pad(potential, (delta_r, delta_theta), 'constant', constant_values=0)
-            # maybe something is wrong in how the first term was written
-            potential = (((i*delta_r)**2)*delta_theta**2)/(2*((i*delta_r)**2)*(delta_theta**2 + 1)) * (potential[2:, 1:-1] + potential[-2:, 1:-1])
+            potential = np.pad(potential,[(1, 1), (1, 1)], mode='constant')
+            # We know from the assignement that delta r is one, the formula was thus simplified
+            r_carré = 1**2 # For now
+            A_1 = (1/(2*M) + (r_carré * pi**2 / (8*M)))
+            A_2 = (1/sqrt(r_carré) + pi**2 * sqrt(r_carré)/ (4*M**2))
+            A_3 = (1/2 + 2 * M**2 / (r_carré * pi**2))
+            potential = (A_1)(potential[:-2, 1:-1] + potential[2:, 1:-1]) +(A_2)(potential[2:, 1:-1] - potential[:-2, 1:-1]) + (A_3)(potential[1:-1, :-2] + potential[1:-1, 2:])
 
             np.copyto(potential, constant_voltage, where=constant_voltage != 0)
             return ScalarField(potential)
