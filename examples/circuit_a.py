@@ -26,18 +26,18 @@ if __name__ == "__main__":
     horizontal_eqs = (x_expression_horizontal, y_expression_horizontal)
 
     wires = [
-        Wire((0, 0), (0, 100), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((0, 100), (60, 100), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((60, 100), (80, 100), horizontal_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
-        Wire((80, 100), (100, 100), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((100, 100), (100, 40), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((100, 40), (100, 20), vertical_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
-        Wire((100, 20), (100, 0), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((100, 0), (40, 0), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        VoltageSource((40, 0), (20, 0), horizontal_eqs, cartesian_variables, BATTERY_VOLTAGE),
-        Wire((20, 0), (0, 0), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE)
+        Wire((10, 10), (10, 90), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((10, 90), (58, 90), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((58, 90), (74, 90), horizontal_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
+        Wire((74, 90), (90, 90), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((90, 90), (90, 42), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((90, 42), (90, 26), vertical_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
+        Wire((90, 26), (90, 10), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((90, 10), (42, 10), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        VoltageSource((42, 10), (26, 10), horizontal_eqs, cartesian_variables, BATTERY_VOLTAGE),
+        Wire((26, 10), (10, 10), horizontal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE)
     ]
-    ground_position = (20, 0)
+    ground_position = (26, 10)
 
     circuit = Circuit(wires, ground_position)
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.CARTESIAN, shape=WORLD_SHAPE)
