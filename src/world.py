@@ -1,6 +1,5 @@
 from typing import Tuple, Union
 
-import numpy as np
 from scipy.constants import mu_0, pi
 
 from src.biot_savart_equation_solver import BiotSavartEquationSolver
@@ -153,7 +152,7 @@ class World:
         elif self._coordinate_system == CoordinateSystem.POLAR:
             self._magnetic_field = BiotSavartEquationSolver()._solve_in_polar_coordinate(self._circuit_current, self.delta_q1, self.delta_q2)
             self._potential = LaplaceEquationSolver(nb_relaxation_iterations)._solve_in_polar_coordinate(self._circuit_voltage, self.delta_q1, self.delta_q2)
-            self._electric_field = -np.gradient(self._potential)
+            self._electric_field = -self._potential.gradient()
             self._energy_flux = 1/mu_0*(self._electric_field.cross(self._magnetic_field))
      
 
