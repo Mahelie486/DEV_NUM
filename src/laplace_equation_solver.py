@@ -52,10 +52,11 @@ class LaplaceEquationSolver:
         """
 
         potential = constant_voltage.copy()
-        # Potentiel has size of World_Shape
+        
+        # On itère pour raffiner les valeurs de potentiels à chaque points selon les points qui l'entoure
         for _ in range(self.nb_iterations):
 
-            # pourrais remplacer les 1 par les deltas
+            # Ajouter des 0 sur le contour permet d'avoir des matrices toujours de bonne tailles pour le calcul
             potential = np.pad(potential,[(1, 1), (1, 1)], mode='constant')
 
             potential = 1/4 * (potential[:-2, 1:-1] + potential[2:, 1:-1] + potential[1:-1, :-2] + potential[1:-1, 2:])
