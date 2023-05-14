@@ -28,20 +28,27 @@ if __name__ == "__main__":
     diagonal_eqs = (x_expression_diagonal, y_expression_diagonal)
 
     wires = [
-        VoltageSource((40, 26), (60, 26), horizontal_eqs, cartesian_variables, BATTERY_VOLTAGE),
-        Wire((60, 26), (74, 50), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((74, 50), (60, 74), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((60, 74), (40, 74), horizontal_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
-        Wire((40, 74), (26, 50), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
-        Wire((26, 50), (40, 26), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        VoltageSource((40, 10), (60, 10), horizontal_eqs, cartesian_variables, BATTERY_VOLTAGE),
+        Wire((60, 10), (80, 20), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((80, 20), (90, 40), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((90, 40), (90, 60), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((90, 60), (80, 80), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((80, 80), (60, 90), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((60, 90), (40, 90), horizontal_eqs, cartesian_variables, HIGH_WIRE_RESISTANCE),
+        Wire((40, 90), (20, 80), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((20, 80), (10, 60), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((10, 60), (10, 40), vertical_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((10, 40), (20, 20), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
+        Wire((20, 20), (40, 10), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
     ]
-    ground_position = (40, 26)
+    ground_position = (40, 10)
 
     circuit = Circuit(wires, ground_position)
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.CARTESIAN, shape=WORLD_SHAPE)
     
     world.show_circuit(
-        {0: (40, 26), 1: (60, 26), 2: (74, 50), 3: (60, 74), 4: (40, 74), 5: (26, 50)}
+        {0: (40, 10), 1: (60, 10), 2: (80, 20), 3: (90, 40), 4: (90, 60), 5: (80, 80), 6: (60, 90), 7: (40, 90), 8: (
+        20, 80), 9: (10, 60), 10: (10, 40), 11: (20, 20)}
     )
     world.compute()
     world.show_all()
