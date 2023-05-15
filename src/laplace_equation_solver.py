@@ -12,7 +12,7 @@ class LaplaceEquationSolver:
     voltage field V (for example due to wires).
     """
 
-    def __init__(self, nb_iterations: int = 1000):
+    def __init__(self, nb_iterations: int = 50):
         """
         Laplace solver constructor. Used to define the number of iterations for the relaxation method.
 
@@ -50,18 +50,23 @@ class LaplaceEquationSolver:
             the electrical components and in the empty space between the electrical components, while the field V
             always gives V(x, y) = 0 if (x, y) is not a point belonging to an electrical component of the circuit.
         """
-
-        potential = constant_voltage.copy()
+        # nb. Les delta sont déjà considérés pour tte les valeurs contenues dans constant_voltage
         
+        # Crée une deuxième matrice de même taille avec les mêmes valeurs pour éviter de modifier la matrice initiale
+        potential = constant_voltage.copy()
+
         # On itère pour raffiner les valeurs de potentiels à chaque points selon les points qui l'entoure
         for _ in range(self.nb_iterations):
 
             # Ajouter des 0 sur le contour permet d'avoir des matrices toujours de bonne tailles pour le calcul
             potential = np.pad(potential,[(1, 1), (1, 1)], mode='constant')
 
+            # Equation obtenue avec discrétisation de Laplace avec des matrices pour tous les points
             potential = 1/4 * (potential[:-2, 1:-1] + potential[2:, 1:-1] + potential[1:-1, :-2] + potential[1:-1, 2:])
+
+            # On reporte le tout dans la matrice initiale pour recommencer la boucle et étendre les valeurs
             np.copyto(potential, constant_voltage, where=constant_voltage != 0)
-            
+
         return ScalarField(potential)
 
     def _solve_in_polar_coordinate(
@@ -97,26 +102,30 @@ class LaplaceEquationSolver:
         # (plus facile qu'utiliser lui de la fomction même si moins rapide)
         
         N, M = constant_voltage.shape
-        # delta_theta = pi/(2*M) but not useful with direct substitution in eqn
-        # Note to self
-        # r - 1 = potential[:-2, 1:-1]
-        # r + 1 = potential[2:, 1:-1]
-        # theta + 1 = potential[1:-1, :-2]  # plus 1 = plus 1 delta, possible avec it.? 
-        # theta - 1 = potential[1:-1, 2:]
-
+        const = np.array([])
         for i in range(self.nb_iterations):
 
             potential = np.pad(potential,[(1, 1), (1, 1)], mode='constant')
-            # We know from the assignement that delta r is one, the formula was thus simplified
-            r_carré = 1**2 # For now
-            A_1 = (1/(2*M) + (r_carré * pi**2 / (8*M)))
-            A_2 = (1/sqrt(r_carré) + pi**2 * sqrt(r_carré)/ (4*M**2))
-            A_3 = (1/2 + 2 * M**2 / (r_carré * pi**2))
-            # Manque constantes
-            potential = (potential[:-2, 1:-1] + potential[2:, 1:-1]) +(potential[2:, 1:-1] - potential[:-2, 1:-1]) + (potential[1:-1, :-2] + potential[1:-1, 2:])
+            terme_1_potentiel = (potential[:-2, 1:-1] + potential[2:, 1:-1])[0]
+            terme_2_potentiel = (potential[2:, 1:-1] - potential[:-2, 1:-1])[0]
+            terme_3_potentiel = (potential[1:-1, :-2] + potential[1:-1, 2:])[0]
+    
+            potential = np.vstack((terme_1_potentiel, terme_2_potentiel, terme_3_potentiel))
 
+            potential = np.transpose(potential)
+
+            const = np.array([])
+            for k, j in enumerate(potential):
+                r_carré = (k + 1)**2
+                A_1 = (1/(2*M) + (r_carré * pi**2 / (8*M)))
+                A_2 = (1/sqrt(r_carré) + pi**2 * sqrt(r_carré)/ (4*M**2))
+                A_3 = (1/2 + 2 * M**2 / (r_carré * pi**2))
+                const = np.array(const.tolist() + [[[A_1, A_2, A_3]]])
+                intermédiaire = np.multiply(potential, const)
+                intermédiaire = np.array(np.sum(intermédiaire, axis = 2))
+            potential = intermédiaire
             np.copyto(potential, constant_voltage, where=constant_voltage != 0)
-            return ScalarField(potential)
+        return ScalarField(potential)
 
 
     def solve(

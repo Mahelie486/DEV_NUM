@@ -5,13 +5,33 @@ from math import sqrt, cos, pi
 
 
 # Début tests Laplace
+a = [1, 2, 3]
+b = [4, 5, 6]
+c = [7, 8, 9]
 
+d = np.vstack((a, b, c))
+
+e = np.transpose(d)
+
+potentiel = e
+# potentiel = np.array([[[1, 1, 1], [1, 1, 1], [1, 1, 1]],
+         # [[1, 1, 1], [1, 1, 1], [1, 1, 1]]])
+
+fact = np.array([])
+for i, j in enumerate(potentiel):
+    fact = np.array(fact.tolist() + [[[i+1, 2*(i+1), 3*(i+1)]]])
+    b = np.multiply(potentiel, fact)
+
+potentiel = np.sum(b,axis = 2)
+print(potentiel)
+
+""""
 a = np.array([[ 1.,  1.,  1.,  1.,  1.],[ 1.,  1.,  1.,  1.,  1.], [ 1.,  1.,  1.,  1.,  1.]])
 print(a.shape)
 b = np.pad(a, [(1, 1), (1, 1)], mode='constant')
 print(b.shape)
 print(b)
-
+"""
 # Début tests Biot-Savart  
 """ 
 arr = [1, 3, 2, 5, 4]
