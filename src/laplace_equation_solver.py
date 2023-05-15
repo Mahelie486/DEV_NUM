@@ -106,11 +106,10 @@ class LaplaceEquationSolver:
         N, M = constant_voltage.shape
         
         # Déterminer les constantes pour l'équation trouvé dans la discrétisation
-        r = ((np.indices(pot_modif.shape)[0])*delta_r)
-        r_carré = np.square(r)
-        A_1 = (1/(2*M) + ((r_carré * (pi**2 ))/ (8*M)))
-        A_2 = (1/r + ((pi**2)* r)/ (4*M**2))[1:-1, 1:-1]
-        A_3 = (1/2 + (2 * (M**2 ))/ (r_carré * (pi**2)))[1:-1, 1:-1]
+        r = (np.indices(pot_modif.shape)[0])*delta_r
+        A_1 = ((r**2 * delta_theta**2)/((2* r**2 * delta_theta**2) + (2 * delta_r**2)))
+        A_2 = ((r * delta_r * delta_theta**2)/ ((r**2 * delta_theta**2) + delta_r**2))[1:-1, 1:-1]
+        A_3 = (delta_r**2 / (2*r*delta_theta**2) + 2*delta_r**2)[1:-1, 1:-1]
 
         # On itère pour raffiner les valeurs de potentiels à chaque points selon les points qui l'entoure
         for _ in range(self.nb_iterations):
@@ -120,12 +119,11 @@ class LaplaceEquationSolver:
 
             # Equation obtenue avec discrétisation de Laplace avec des matrices pour tous les points
             potential = (potential[:-2, 1:-1] + potential[2:, 1:-1]) * A_1
-            + (potential[2:, 1:-1] - potential[:-2, 1:-1]) *  A_2
+            + (potential[:-2, 1:-1] - potential[2:, 1:-1]) *  A_2
             + (potential[1:-1, :-2]+ potential[1:-1, 2:]) * A_3
 
             # On reporte le tout dans la matrice initiale pour recommencer la boucle et étendre les valeurs
             np.copyto(potential, constant_voltage, where=constant_voltage != 0)
-
         return ScalarField(potential)
 
 
