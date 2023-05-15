@@ -3,7 +3,7 @@ import numpy as np
 from src.coordinate_and_position import CoordinateSystem
 from src.fields import ScalarField
 
-from math import pi, sqrt
+from math import pi
 
 
 class LaplaceEquationSolver:
@@ -96,25 +96,37 @@ class LaplaceEquationSolver:
             the electrical components and in the empty space between the electrical components, while the field V
             always gives V(r, θ) = 0 if (r, θ) is not a point belonging to an electrical component of the circuit.
         """
-        potential = constant_voltage.copy()
-        pot_modif = np.copy(constant_voltage)
+        # nb. Les delta sont déjà considérés pour tte les valeurs contenues dans constant_voltage
         
+        # Crée une deuxième matrice de même taille avec les mêmes valeurs pour éviter de modifier la matrice initiale       
+        potential = constant_voltage.copy()
+
+        # Nécessaire pour déterminer les indices et au bout du compte le r
+        pot_modif = np.copy(constant_voltage)
         N, M = constant_voltage.shape
-        r_carré = np.square((np.indices(pot_modif.shape)[0])*delta_r)
-        r = (np.indices(pot_modif.shape)[0])*delta_r
+        
+        # Déterminer les constantes pour l'équation trouvé dans la discrétisation
+        r = ((np.indices(pot_modif.shape)[0])*delta_r)
+        r_carré = np.square(r)
+        A_1 = (1/(2*M) + ((r_carré * (pi**2 ))/ (8*M)))
+        A_2 = (1/r + ((pi**2)* r)/ (4*M**2))[1:-1, 1:-1]
+        A_3 = (1/2 + (2 * (M**2 ))/ (r_carré * (pi**2)))[1:-1, 1:-1]
 
-        for i in range(self.nb_iterations):
+        # On itère pour raffiner les valeurs de potentiels à chaque points selon les points qui l'entoure
+        for _ in range(self.nb_iterations):
 
+            # Ajouter des 0 sur le contour permet d'avoir des matrices toujours de bonne tailles pour le calcul
             potential = np.pad(potential,[(1, 1), (1, 1)], mode='constant')
-            r_carré = 1**2
-            A_1 = (1/(2*M) + ((r_carré * (pi**2 ))/ (8*M)))
-            A_2 = (1/r + ((pi**2)* r)/ (4*M**2))
-            A_3 = (1/2 + (2 * (M**2 ))/ (r_carré * (pi**2)))
-            # Manque constantes
-            potential = np.multiply((potential[:-2, 1:-1] + potential[2:, 1:-1]), A_1) + np.multiply((potential[2:, 1:-1] - potential[:-2, 1:-1]), A_2) + np.multiply((potential[1:-1, :-2] + potential[1:-1, 2:]), A_3)
 
+            # Equation obtenue avec discrétisation de Laplace avec des matrices pour tous les points
+            potential = (potential[:-2, 1:-1] + potential[2:, 1:-1]) * A_1
+            + (potential[2:, 1:-1] - potential[:-2, 1:-1]) *  A_2
+            + (potential[1:-1, :-2]+ potential[1:-1, 2:]) * A_3
+
+            # On reporte le tout dans la matrice initiale pour recommencer la boucle et étendre les valeurs
             np.copyto(potential, constant_voltage, where=constant_voltage != 0)
-            return ScalarField(potential)
+
+        return ScalarField(potential)
 
 
     def solve(
