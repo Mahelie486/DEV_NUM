@@ -12,7 +12,7 @@ class LaplaceEquationSolver:
     voltage field V (for example due to wires).
     """
 
-    def __init__(self, nb_iterations: int = 50):
+    def __init__(self, nb_iterations: int = 1000):
         """
         Laplace solver constructor. Used to define the number of iterations for the relaxation method.
 
@@ -96,36 +96,25 @@ class LaplaceEquationSolver:
             the electrical components and in the empty space between the electrical components, while the field V
             always gives V(r, θ) = 0 if (r, θ) is not a point belonging to an electrical component of the circuit.
         """
-
         potential = constant_voltage.copy()
-        # Trouver delta_theta
-        # (plus facile qu'utiliser lui de la fomction même si moins rapide)
+        pot_modif = np.copy(constant_voltage)
         
         N, M = constant_voltage.shape
-        const = np.array([])
+        r_carré = np.square((np.indices(pot_modif.shape)[0])*delta_r)
+        r = (np.indices(pot_modif.shape)[0])*delta_r
+
         for i in range(self.nb_iterations):
 
             potential = np.pad(potential,[(1, 1), (1, 1)], mode='constant')
-            terme_1_potentiel = (potential[:-2, 1:-1] + potential[2:, 1:-1])[0]
-            terme_2_potentiel = (potential[2:, 1:-1] - potential[:-2, 1:-1])[0]
-            terme_3_potentiel = (potential[1:-1, :-2] + potential[1:-1, 2:])[0]
-    
-            potential = np.vstack((terme_1_potentiel, terme_2_potentiel, terme_3_potentiel))
+            r_carré = 1**2
+            A_1 = (1/(2*M) + ((r_carré * (pi**2 ))/ (8*M)))
+            A_2 = (1/r + ((pi**2)* r)/ (4*M**2))
+            A_3 = (1/2 + (2 * (M**2 ))/ (r_carré * (pi**2)))
+            # Manque constantes
+            potential = np.multiply((potential[:-2, 1:-1] + potential[2:, 1:-1]), A_1) + np.multiply((potential[2:, 1:-1] - potential[:-2, 1:-1]), A_2) + np.multiply((potential[1:-1, :-2] + potential[1:-1, 2:]), A_3)
 
-            potential = np.transpose(potential)
-
-            const = np.array([])
-            for k, j in enumerate(potential):
-                r_carré = (k + 1)**2
-                A_1 = (1/(2*M) + (r_carré * pi**2 / (8*M)))
-                A_2 = (1/sqrt(r_carré) + pi**2 * sqrt(r_carré)/ (4*M**2))
-                A_3 = (1/2 + 2 * M**2 / (r_carré * pi**2))
-                const = np.array(const.tolist() + [[[A_1, A_2, A_3]]])
-                intermédiaire = np.multiply(potential, const)
-                intermédiaire = np.array(np.sum(intermédiaire, axis = 2))
-            potential = intermédiaire
             np.copyto(potential, constant_voltage, where=constant_voltage != 0)
-        return ScalarField(potential)
+            return ScalarField(potential)
 
 
     def solve(
