@@ -42,7 +42,7 @@ if __name__ == "__main__":
         VoltageSource((60*np.cos(2*np.pi / 9), 60*np.sin(2*np.pi / 9)), (60*np.cos(np.pi / 7), 60*np.sin(np.pi / 7)), diagonal_eqs, cartesian_variables, BATTERY_VOLTAGE),
         Wire((60*np.cos(np.pi / 7), 60*np.sin(np.pi / 7)), (60*np.cos(theta_1), 60*np.sin(theta_1)), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
     ]
-    ground_position = (60*np.cos(2*np.pi / 9), 60*np.sin(2*np.pi / 9))
+    ground_position = (60*np.cos(np.pi / 7), 60*np.sin(np.pi / 7))
 
     circuit = Circuit(wires, ground_position)
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.CARTESIAN, shape=WORLD_SHAPE)
