@@ -40,7 +40,7 @@ if __name__ == "__main__":
         Wire((10, 40), (20, 20), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
         Wire((20, 20), (40, 10), diagonal_eqs, cartesian_variables, LOW_WIRE_RESISTANCE),
     ]
-    ground_position = (40, 10)
+    ground_position = (60, 10)
 
     circuit = Circuit(wires, ground_position)
     world = World(circuit=circuit, coordinate_system=CoordinateSystem.CARTESIAN, shape=WORLD_SHAPE)
