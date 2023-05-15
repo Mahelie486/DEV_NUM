@@ -155,7 +155,7 @@ class World:
             #calcul du champ électrique
             self._electric_field = -self._potential.gradient()
             #calcul du flux d'énergie et du vecteur Poynting
-            self._energy_flux = 1/mu_0*(self._electric_field.cross(self._magnetic_field))
+            self._energy_flux = -(self._electric_field.cross(self._magnetic_field))
         #calcul en coordonnées polaires
         elif self._coordinate_system == CoordinateSystem.POLAR:
             #calcul du champ magnétique
@@ -165,7 +165,7 @@ class World:
             #calcul du champ électrique
             self._electric_field = -self._potential.gradient()
             #calcul du flux d'énergie et du vecteur Poynting
-            self._energy_flux = 1/mu_0*(self._electric_field.cross(self._magnetic_field))
+            self._energy_flux = -(self._electric_field.cross(self._magnetic_field))
      
 
     def show_circuit(self, nodes_position_in_figure: dict = None):
